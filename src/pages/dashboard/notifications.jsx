@@ -1,75 +1,27 @@
 import {
   Card,
   CardBody,
-  CardHeader,
-  CardFooter,
   Avatar,
   Typography,
   Tabs,
   TabsHeader,
   Tab,
-  Switch,
-  Tooltip,
-  Button,
 } from "@material-tailwind/react";
 import {
   HomeIcon,
   ChatBubbleLeftEllipsisIcon,
   Cog6ToothIcon,
-  PencilIcon,
 } from "@heroicons/react/24/solid";
-import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
-import { platformSettingsData, conversationsData, projectsData } from "@/data";
-import { useEffect, useRef, useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
 import axios from "axios";
 
 export function Notifications() {
-  const API_KEY = '65b3525fcfda1046190673akpe8307d'
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [pincode, setPincode] = useState('');
-  const latitudeRef = useRef(null);
-  const longitudeRef = useRef(null);
-
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const currentLatitude = position.coords.latitude;
-      const currentLongitude = position.coords.longitude;
-
-      latitudeRef.current = currentLatitude;
-      longitudeRef.current = currentLongitude;
-
-      console.log(currentLatitude);
-      console.log(currentLongitude);
-
-      let API_ENDPOINT = `https://geocode.maps.co/reverse?lat=${currentLatitude}&lon=${currentLongitude}&api_key=${API_KEY}`;
-
-      axios.get(API_ENDPOINT)
-        .then((response) => {
-          setCity(response.data.address.state_district);
-          setState(response.data.address.state);
-          setPincode(response.data.address.postcode);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  }, []);
-
   const initialValues = {
     clientcode: '',
     fname: '',
     lname: '',
     mobilenumber: '',
-    address: '',
-    postalcode: '',
-    city: '',
-    state: '',
     skus: [],
-    awb: '',
-    status: '',
   }
   const addProduct = async (product) => {
     const res = await axios.post('http://localhost:8080/clients', product);
@@ -126,13 +78,7 @@ export function Notifications() {
             <Formik
               initialValues={initialValues}
               onSubmit={(values) => {
-                const updatedValues = {
-                  ...values,
-                  city: city,
-                  state: state,
-                  postalcode: pincode,
-                };
-                addProduct(updatedValues);
+                addProduct(values);
               }}
             >
               {({ values }) => (
@@ -302,10 +248,10 @@ export function Notifications() {
               )}
 
             </Formik>
-          </div>       
+          </div>
         </CardBody>
       </Card>
-      
+
     </>
   );
 }

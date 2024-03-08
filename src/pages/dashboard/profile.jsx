@@ -1,16 +1,11 @@
 import {
   Card,
   CardBody,
-  CardHeader,
-  CardFooter,
   Avatar,
   Typography,
   Tabs,
   TabsHeader,
   Tab,
-  Switch,
-  Tooltip,
-  Button,
 } from "@material-tailwind/react";
 import {
   HomeIcon,
@@ -18,21 +13,21 @@ import {
   Cog6ToothIcon,
   PencilIcon,
 } from "@heroicons/react/24/solid";
-import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
-import { platformSettingsData, conversationsData, projectsData } from "@/data";
 import { useEffect, useRef, useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export function Profile() {
-
   const API_KEY = '65b3525fcfda1046190673akpe8307d'
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [pincode, setPincode] = useState('');
   const latitudeRef = useRef(null);
   const longitudeRef = useRef(null);
-
+  const { id } = useParams();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -60,22 +55,23 @@ export function Profile() {
   }, []);
 
   const initialValues = {
-    clientcode: '',
-    fname: '',
-    lname: '',
-    mobilenumber: '',
     address: '',
     postalcode: '',
     city: '',
     state: '',
-    skus: [],
-    awb: '',
-    status: '',
   }
   const updateProduct = async (product) => {
-    const res = await axios.patch('http://localhost:8080/clients', product);
+    const res = await axios.patch(`http://localhost:8080/clients/${id}`, product);
     console.log(res.data);
   }
+  const getClient = async () => {
+    const res = await axios.get(`http://localhost:8080/clients/${id}`);
+    setFname(res.data.fname);
+    setLname(res.data.lname);
+  }
+  useEffect(() => {
+    getClient();
+  }, [])
   return (
     <>
       <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover	bg-center">
@@ -150,7 +146,7 @@ export function Profile() {
                           </div>
                           <div className="mt-2">
                             <div className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2">
-                              Kunal
+                              {fname}
                             </div>
                           </div>
                         </div>
@@ -161,7 +157,7 @@ export function Profile() {
                           </div>
                           <div className="mt-2">
                             <div className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2">
-                              Maloo
+                              {lname}
                             </div>
                           </div>
                         </div>
@@ -227,7 +223,7 @@ export function Profile() {
                             />
                           </div>
                         </div>
-                        
+
                       </div>
                     </div>
                   </div>
