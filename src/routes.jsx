@@ -5,9 +5,13 @@ import {
   InformationCircleIcon,
   ServerStackIcon,
   RectangleStackIcon,
+  TruckIcon,
+  CheckIcon,
+  ShoppingBagIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Orders, Notifications,Shipped,Rto, Delivered } from "@/pages/dashboard";
+import { Home, Orders, Shipped, Rto, Delivered, Office } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
+import { ArrowUturnLeftIcon, BuildingOffice2Icon } from "@heroicons/react/24/outline";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -24,34 +28,34 @@ export const routes = [
         element: <Home />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <ShoppingBagIcon {...icon} />,
         name: "Orders",
         path: "/orders",
         element: <Orders />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <TruckIcon {...icon} />,
         name: "Shipped",
         path: "/shipped",
         element: <Shipped />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <CheckIcon {...icon} />,
         name: "Delivered",
         path: "/delivered",
         element: <Delivered />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <ArrowUturnLeftIcon {...icon} />,
         name: "RTO",
         path: "/rto",
         element: <Rto />,
       },
       {
-        icon: <InformationCircleIcon {...icon} />,
+        icon: <BuildingOffice2Icon {...icon} />,
         name: "Office",
-        path: "/notifications",
-        element: <Notifications />,
+        path: "/office",
+        element: <Office />,
       },
     ],
   },

@@ -6,12 +6,14 @@ import {
   Tabs,
   TabsHeader,
   Tab,
+  Dialog,
+  DialogBody,
+  IconButton,
 } from "@material-tailwind/react";
 import {
   HomeIcon,
   ChatBubbleLeftEllipsisIcon,
   Cog6ToothIcon,
-  PencilIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
@@ -25,34 +27,57 @@ export function Profile() {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [pincode, setPincode] = useState('');
-  const latitudeRef = useRef(null);
-  const longitudeRef = useRef(null);
   const { id } = useParams();
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(!open);
+  // const latitudeRef = useRef(null);
+  // const longitudeRef = useRef(null);
+
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition((position) => {
+  //     const currentLatitude = position.coords.latitude;
+  //     const currentLongitude = position.coords.longitude;
+
+  //     latitudeRef.current = currentLatitude;
+  //     longitudeRef.current = currentLongitude;
+
+  //     console.log(currentLatitude);
+  //     console.log(currentLongitude);
+
+  //     let API_ENDPOINT = `https://geocode.maps.co/reverse?lat=${currentLatitude}&lon=${currentLongitude}&api_key=${API_KEY}`;
+
+  //     axios.get(API_ENDPOINT)
+  //       .then((response) => {
+  //         setCity(response.data.address.state_district);
+  //         setState(response.data.address.state);
+  //         setPincode(response.data.address.postcode);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   });
+  // }, []);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const currentLatitude = position.coords.latitude;
-      const currentLongitude = position.coords.longitude;
+    const getLocation = async () => {
+      try {
+        if (pincode.length === 6) {
+          const res = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
+          const data = res.data[0].PostOffice[0];
+          setCity(data.District);
+          setState(data.State);
+          console.log('response from postal code api ->', res);
+        }
+      } catch (error) {
+        console.log('error fetching postal code->', error);
+      }
+    }
+    getLocation();
+  }, [pincode])
 
-      latitudeRef.current = currentLatitude;
-      longitudeRef.current = currentLongitude;
-
-      console.log(currentLatitude);
-      console.log(currentLongitude);
-
-      let API_ENDPOINT = `https://geocode.maps.co/reverse?lat=${currentLatitude}&lon=${currentLongitude}&api_key=${API_KEY}`;
-
-      axios.get(API_ENDPOINT)
-        .then((response) => {
-          setCity(response.data.address.state_district);
-          setState(response.data.address.state);
-          setPincode(response.data.address.postcode);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  }, []);
+  const handlePincodeChange = (event) => {
+    setPincode(event.target.value);
+  }
 
   const initialValues = {
     address: '',
@@ -90,7 +115,7 @@ export function Profile() {
               />
               <div>
                 <Typography variant="h5" color="blue-gray" className="mb-1">
-                  Richard Davis
+                  Saurabh Duggar
                 </Typography>
                 <Typography
                   variant="small"
@@ -189,6 +214,7 @@ export function Profile() {
                               id="postalcode"
                               autoComplete="postal-code"
                               value={pincode}
+                              onChange={handlePincodeChange}
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
                             />
                           </div>
@@ -234,6 +260,7 @@ export function Profile() {
                     </button>
                     <button
                       type="submit"
+                      onClick={handleOpen}
                       className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
                       Generate Order ID
@@ -244,7 +271,16 @@ export function Profile() {
 
             </Formik>
           </div>
-
+          <Dialog open={open} handler={handleOpen}>
+            <DialogBody>
+              <div className="flex flex-col items-center justify-center m-auto">
+                <IconButton className="rounded-full mb-2" color="green">
+                  <i className="fa solid fa-check" />
+                </IconButton>
+                <h1>Order Placed Successfully</h1>
+              </div>
+            </DialogBody>
+          </Dialog>
         </CardBody>
       </Card>
     </>
