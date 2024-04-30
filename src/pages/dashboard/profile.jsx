@@ -9,6 +9,7 @@ import {
   Dialog,
   DialogBody,
   IconButton,
+  Button,
 } from "@material-tailwind/react";
 import {
   HomeIcon,
@@ -21,15 +22,15 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 export function Profile() {
-  const API_KEY = '65b3525fcfda1046190673akpe8307d'
-  const [fname, setFname] = useState('');
-  const [lname, setLname] = useState('');
+  // const API_KEY = '65b3525fcfda1046190673akpe8307d'
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [pincode, setPincode] = useState('');
   const { id } = useParams();
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
+
   // const latitudeRef = useRef(null);
   // const longitudeRef = useRef(null);
 
@@ -58,12 +59,15 @@ export function Profile() {
   //   });
   // }, []);
 
+  const handleOpen = () => setOpen(!open);
+
   useEffect(() => {
     const getLocation = async () => {
       try {
         if (pincode.length === 6) {
           const res = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
           const data = res.data[0].PostOffice[0];
+          console.log(res.data[0]);
           setCity(data.District);
           setState(data.State);
           console.log('response from postal code api ->', res);
@@ -91,8 +95,8 @@ export function Profile() {
   }
   const getClient = async () => {
     const res = await axios.get(`http://localhost:8080/clients/${id}`);
-    setFname(res.data.fname);
-    setLname(res.data.lname);
+    setName(res.data.name);
+    setEmail(res.data.email);
   }
   useEffect(() => {
     getClient();
@@ -147,7 +151,7 @@ export function Profile() {
           <div className='mx-20 max-w-[1000px] xl:mx-auto my-10'>
             <Formik
               initialValues={initialValues}
-              onSubmit={(values) => {
+              onSubmit={(values, actions) => {
                 const updatedValues = {
                   ...values,
                   city: city,
@@ -155,6 +159,7 @@ export function Profile() {
                   postalcode: pincode,
                 };
                 updateProduct(updatedValues);
+                actions.resetForm();
               }}
             >
               {({ values }) => (
@@ -167,22 +172,22 @@ export function Profile() {
                       <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-3">
                           <div className="block text-sm font-medium leading-6 text-gray-900">
-                            First name
+                            Name
                           </div>
                           <div className="mt-2">
                             <div className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2">
-                              {fname}
+                              {name}
                             </div>
                           </div>
                         </div>
 
                         <div className="sm:col-span-3">
                           <div className="block text-sm font-medium leading-6 text-gray-900">
-                            Last name
+                            Email
                           </div>
                           <div className="mt-2">
                             <div className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2">
-                              {lname}
+                              {email}
                             </div>
                           </div>
                         </div>
@@ -221,32 +226,24 @@ export function Profile() {
                         </div>
 
                         <div className="sm:col-span-2">
-                          <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
+                          <div htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
                             District
-                          </label>
+                          </div>
                           <div className="mt-2">
-                            <Field
-                              type="text"
-                              name="city"
-                              id="city"
-                              value={city}
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
-                            />
+                            <div className="h-[2.25rem] block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-2">
+                              {city}
+                            </div>
                           </div>
                         </div>
 
                         <div className="sm:col-span-2">
-                          <label htmlFor="state" className="block text-sm font-medium leading-6 text-gray-900">
+                          <div htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
                             State
-                          </label>
+                          </div>
                           <div className="mt-2">
-                            <Field
-                              type="text"
-                              name="state"
-                              id="state"
-                              value={state}
-                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
-                            />
+                            <div className="h-[2.25rem] block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-2">
+                              {state}
+                            </div>
                           </div>
                         </div>
 
@@ -254,17 +251,20 @@ export function Profile() {
                     </div>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      onClick={handleOpen}
-                      className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  <div className="mt-8">
+                    <Button
+                      color="blue-gray"
+                      className="mr-4"
                     >
-                      Generate Order ID
-                    </button>
+                      Clear
+                    </Button>
+                    <Button
+                      type="submit"
+                      color="green"
+                      onClick={handleOpen} variant="gradient"
+                    >
+                      Place Order
+                    </Button>
                   </div>
                 </Form>
               )}

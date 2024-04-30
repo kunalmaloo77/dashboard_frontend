@@ -30,7 +30,6 @@ export function Shipped() {
   const initialValues = {
     status: '',
   }
-  const newArray = shipped;
   const getShippedOrders = async () => {
     const res = await axios.get('http://localhost:8080/clients/shipped');
     setShipped(res.data);
@@ -39,12 +38,7 @@ export function Shipped() {
     getShippedOrders();
   }, [])
 
-  const updateProduct = async (product) => {
-    const res = await axios.patch(`http://localhost:8080/clients/${id}`, product);
-    console.log(res.data);
-  }
-
-  let TABLE_HEAD = ["client code", "name", "skus", "amount", "quantity", "total amount", "mobile number", "address", "postalcode", "city", "state", "awb number", "status"];
+  let TABLE_HEAD = ["date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name", "status"];
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
@@ -93,38 +87,31 @@ export function Shipped() {
               </tr>
             </thead>
             <tbody>
-              {newArray.map(
-                ({ clientcode, fname, lname, skus, mobilenumber, city, address, postalcode, state, awb, id, status }, key) => {
+              {shipped?.map(
+                ({ orderid, name, sku, mobilenumber, city, address, postalcode, state, awb, status, totalamount, amount, quantity, channelname, email, date }, key) => {
                   const className = `py-3 px-5 ${key === shipped.length - 1
                     ? ""
                     : "border-b border-blue-gray-50"
                     }`;
-                  return skus.map(({ sku, amount, quantity }, skuKey) => (
-                    <tr key={`${clientcode}_${skuKey}`}>
+                  return (
+                    <tr key={`${orderid}_${key}`}>
                       <td className={className}>
-                        <div className="flex items-center gap-4">
-                          <div>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-semibold"
-                            >
-                              {clientcode}
-                            </Typography>
-                          </div>
-                        </div>
+                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                          {date}
+                        </Typography>
                       </td>
                       <td className={className}>
                         <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {fname}
-                        </Typography>
-                        <Typography className="text-xs font-normal text-blue-gray-500">
-                          {lname}
+                          {orderid}
                         </Typography>
                       </td>
                       <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
+                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                          {name}
+                        </Typography>
+                      </td>
+                      <td className={className}>
+                        <Typography className="text-xs font-semibold text-blue-gray-600">
                           {sku}
                         </Typography>
                       </td>
@@ -140,7 +127,7 @@ export function Shipped() {
                       </td>
                       <td className={className}>
                         <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {quantity * amount}
+                          {totalamount}
                         </Typography>
                       </td>
                       <td className={className}>
@@ -150,36 +137,73 @@ export function Shipped() {
                       </td>
                       <td className={className}>
                         <Typography className="text-xs font-semibold text-blue-gray-600">
+                          {email}
+                        </Typography>
+                      </td>
+                      <td className={className}>
+                        <Typography
+                          className="text-xs font-semibold text-blue-gray-600">
                           {address}
                         </Typography>
                       </td>
                       <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                        <Typography
+                          as="a"
+                          href="#"
+                          className="text-xs font-semibold text-blue-gray-600"
+                        >
                           {postalcode}
                         </Typography>
                       </td>
                       <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                        <Typography
+                          as="a"
+                          href="#"
+                          className="text-xs font-semibold text-blue-gray-600"
+                        >
                           {city}
                         </Typography>
                       </td>
                       <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                        <Typography
+                          as="a"
+                          href="#"
+                          className="text-xs font-semibold text-blue-gray-600"
+                        >
                           {state}
                         </Typography>
                       </td>
                       <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                        <Typography
+                          as="a"
+                          href="#"
+                          className="text-xs font-semibold text-blue-gray-600"
+                        >
                           {awb}
                         </Typography>
                       </td>
                       <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {status}
+                        <Typography
+                          as="a"
+                          href="#"
+                          className="text-xs font-semibold text-blue-gray-600"
+                        >
+                          {channelname}
                         </Typography>
                       </td>
+                      <td className={className}>
+                        <Chip
+                          variant="ghost"
+                          color="green"
+                          size="sm"
+                          value={status}
+                          icon={
+                            <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />
+                          }
+                        />
+                      </td>
                     </tr>
-                  ))
+                  )
                 }
               )}
             </tbody>

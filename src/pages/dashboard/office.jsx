@@ -21,19 +21,67 @@ import axios from "axios";
 import { useState } from "react";
 
 export function Office() {
+  let today = new Date();
+  console.log(today);
+
+  let dd = today.getDate();
+  let mm = today.getMonth() + 1;
+
+  let yyyy = today.getFullYear();
+
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+  today = dd + '/' + mm + '/' + yyyy;
+
+  const [message, setMessage] = useState('');
+  const [open, setOpen] = useState(false);
   const initialValues = {
-    clientcode: '',
-    fname: '',
-    lname: '',
+    date: today,
+    orderid: '',
+    name: '',
     mobilenumber: '',
+    email: '',
     skus: [],
   }
   const addProduct = async (product) => {
-    const res = await axios.post('http://localhost:8080/clients', product);
-    console.log(res.data);
+    const flattenedData = [];
+    const item = product;
+    item.skus.forEach(sku => {
+      flattenedData.push({
+        date: item.date,
+        orderid: item.orderid,
+        name: item.name,
+        mobilenumber: item.mobilenumber,
+        sku: sku.sku,
+        email: item.email,
+        quantity: sku.quantity,
+        amount: sku.amount,
+        totalamount: sku.quantity * sku.amount,
+      });
+    });
+    try {
+      for (let i = 0; i < flattenedData.length; i++) {
+        const res = await axios.post('http://localhost:8080/clients', flattenedData[i]);
+        console.log(res.data);
+      }
+      setMessage("Order Placed Successfully");
+    } catch (error) {
+      if (error.response.status === 409) {
+        console.log("Client Already exists", error);
+        setMessage(error.response.data.error);
+      }
+      else {
+        console.log("Registration error:", error);
+      }
+    }
   }
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => {
+    setOpen(!open);
+  }
   return (
     <>
       <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover	bg-center">
@@ -83,8 +131,9 @@ export function Office() {
           </div>
           <Formik
             initialValues={initialValues}
-            onSubmit={(values) => {
+            onSubmit={(values, actions) => {
               addProduct(values);
+              actions.resetForm();
             }}
           >
             {({ values }) => (
@@ -95,26 +144,18 @@ export function Office() {
                     <div className="flex mb-4">
                       <Field
                         type="text"
-                        name="clientcode"
-                        id="clientcode"
+                        name="orderid"
+                        id="orderid"
                         autoComplete="off"
-                        placeholder="Client Code"
+                        placeholder="Order ID"
                         className="mr-2 p-2 border rounded"
                       />
                       <Field
                         type="text"
-                        name="fname"
-                        id="fname"
-                        autoComplete="given-name"
-                        placeholder="First Name"
-                        className="mr-2 p-2 border rounded"
-                      />
-                      <Field
-                        type="text"
-                        name="lname"
-                        id="lname"
-                        autoComplete="family-name"
-                        placeholder="Last Name"
+                        name="name"
+                        id="name"
+                        autoComplete="name"
+                        placeholder="Name"
                         className="mr-2 p-2 border rounded"
                       />
                       <Field
@@ -123,6 +164,14 @@ export function Office() {
                         type="tel"
                         autoComplete='tel'
                         placeholder="Mobile Number"
+                        className="mr-2 p-2 border rounded"
+                      />
+                      <Field
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete='email'
+                        placeholder="Email"
                         className="mr-2 p-2 border rounded"
                       />
                     </div>
@@ -195,7 +244,7 @@ export function Office() {
                       <Button
                         type="submit"
                         color="green"
-                        onClick={() => handleOpen("xs")} variant="gradient"
+                        onClick={handleOpen} variant="gradient"
                       >
                         Submit
                       </Button>
@@ -208,7 +257,7 @@ export function Office() {
           </Formik>
           <Dialog open={open} handler={handleOpen}>
             <DialogBody>
-              <h1 className="flex m-auto">Order Generated Successfully</h1>
+              <h1 className="flex m-auto">{message}</h1>
             </DialogBody>
           </Dialog>
         </CardBody>

@@ -10,7 +10,7 @@ import {
 import routes from "@/routes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 
-export function Dashboard() {
+export function Dashboard({ showToast }) {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
 
@@ -38,8 +38,16 @@ export function Dashboard() {
           {routes.map(
             ({ layout, pages }) =>
               layout === "dashboard" &&
-              pages.map(({ path, element }) => (
-                <Route exact path={path} element={element} />
+              pages.map(({ path, element, nestedRoutes }) => (
+                <Route exact path={path} element={element}>
+                  {
+                    nestedRoutes && nestedRoutes.map(({ path: nestedPath, element: nestedElement }) => {
+                      return (
+                        <Route key={`/orders${nestedPath}`} path={`/orders${nestedPath}`} element={nestedElement} />
+                      )
+                    })
+                  }
+                </Route>
               ))
           )}
         </Routes>

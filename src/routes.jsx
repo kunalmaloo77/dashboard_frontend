@@ -1,17 +1,18 @@
 import {
   HomeIcon,
-  UserCircleIcon,
-  TableCellsIcon,
-  InformationCircleIcon,
   ServerStackIcon,
   RectangleStackIcon,
   TruckIcon,
   CheckIcon,
   ShoppingBagIcon,
+  PlusIcon,
 } from "@heroicons/react/24/solid";
 import { Home, Orders, Shipped, Rto, Delivered, Office } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import { ArrowUturnLeftIcon, BuildingOffice2Icon } from "@heroicons/react/24/outline";
+import Confirmed from "./pages/dashboard/orders/Confirmed";
+import WithoutAwb from "./pages/dashboard/orders/WithoutAwb";
+import New from "./pages/dashboard/orders/New";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -32,6 +33,26 @@ export const routes = [
         name: "Orders",
         path: "/orders",
         element: <Orders />,
+        nestedRoutes: [
+          {
+            name: "New",
+            value: "new",
+            path: "/new",
+            element: <New />,
+          },
+          {
+            name: "WithoutAWB",
+            value: "withoutawb",
+            path: "/withoutawb",
+            element: <WithoutAwb />,
+          },
+          {
+            name: "Confirmed",
+            value: "confirmed",
+            path: "/confirmed",
+            element: <Confirmed />,
+          },
+        ],
       },
       {
         icon: <TruckIcon {...icon} />,
