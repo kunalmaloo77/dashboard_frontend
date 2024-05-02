@@ -65,7 +65,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const res = await axios.patch('https://dashboard-backend-tw3m.onrender.com/awb/bulkupload', formData, {
+      const res = await axios.patch('https://dashboard-backend-tw3m.onrender.com/upload/awb/bulkupload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
