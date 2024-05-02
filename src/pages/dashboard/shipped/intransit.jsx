@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const Intransit = () => {
   const [shippedData, setShippedData] = useState([]);
   const getShipped = async () => {
-    const res = await axios.get('http://localhost:8080/clients/shipped');
+    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/shipped');
     setShippedData(res.data);
   }
 

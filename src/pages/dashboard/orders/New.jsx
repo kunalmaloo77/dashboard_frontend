@@ -10,7 +10,7 @@ const New = () => {
   const [ordersData, setOrdersData] = useState([]);
   // const { orderid, name, sku, amount, quantity, mobilenumber, totalamount, _id, email, date } = order;
   const getOrders = async () => {
-    const res = await axios.get('http://localhost:8080/clients/orders');
+    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/orders');
     setOrdersData(res.data);
   }
 

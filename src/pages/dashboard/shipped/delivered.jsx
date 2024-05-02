@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const Delivered = () => {
   const [deliveredData, setDeliveredData] = useState([]);
   const getDelivered = async () => {
-    const res = await axios.get('http://localhost:8080/clients/delivered');
+    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/delivered');
     setDeliveredData(res.data);
   }
 

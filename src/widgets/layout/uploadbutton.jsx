@@ -23,7 +23,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const response = await axios.post('http://localhost:8080/upload', formData, {
+      const response = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -65,7 +65,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const res = await axios.patch('http://localhost:8080/upload/awb/bulkupload', formData, {
+      const res = await axios.patch('https://dashboard-backend-tw3m.onrender.com/awb/bulkupload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -108,7 +108,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const res = await axios.patch('http://localhost:8080/upload/status', formData, {
+      const res = await axios.patch('https://dashboard-backend-tw3m.onrender.com/upload/status', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }

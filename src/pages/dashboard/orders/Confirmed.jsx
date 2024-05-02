@@ -9,7 +9,7 @@ const Confirmed = () => {
   const [confirmedData, setConfirmedData] = useState([]);
   const getConfirmed = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/clients/confirmed');
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/confirmed');
       // console.log(res.data, "<-confirmed data");
       setConfirmedData(res.data);
     } catch (error) {

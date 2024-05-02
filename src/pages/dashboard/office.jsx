@@ -64,7 +64,7 @@ export function Office() {
     });
     try {
       for (let i = 0; i < flattenedData.length; i++) {
-        const res = await axios.post('http://localhost:8080/clients', flattenedData[i]);
+        const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/clients', flattenedData[i]);
         console.log(res.data);
       }
       setMessage("Order Placed Successfully");
