@@ -1,25 +1,22 @@
+import OrderTab from '@/widgets/layout/ordertab';
 import { ChevronUpDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
 import { Button, CardBody, Typography } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { CSVLink } from 'react-csv';
+import { Link } from 'react-router-dom';
 
-
-const Confirmed = () => {
-  const [confirmedData, setConfirmedData] = useState([]);
-  const getConfirmed = async () => {
-    try {
-      const res = await axios.get('http://localhost:8080/clients/confirmed');
-      // console.log(res.data, "<-confirmed data");
-      setConfirmedData(res.data);
-    } catch (error) {
-      console.log(error, "<-confirm error");
-    }
+const Intransit = () => {
+  const [shippedData, setShippedData] = useState([]);
+  const getShipped = async () => {
+    const res = await axios.get('http://localhost:8080/clients/shipped');
+    setShippedData(res.data);
   }
+
   const TABLE_HEAD = ["date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   useEffect(() => {
-    getConfirmed();
+    getShipped();
   }, [])
 
   const headers = [
@@ -43,7 +40,7 @@ const Confirmed = () => {
   return (
     <div>
       <div className='inline-block'>
-        <CSVLink data={confirmedData} headers={headers} filename={"confirmed.csv"}>
+        <CSVLink data={shippedData} headers={headers} filename={"intransit.csv"}>
           <Button className="flex justify-center gap-2 mt-2 ml-4" size="md" color="green">
             <FolderArrowDownIcon strokeWidth={2} className="h-6 w-6" />
           </Button>
@@ -63,41 +60,42 @@ const Confirmed = () => {
                     color="blue-gray"
                     className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
                   >
-                    {head}{" "}
-                    {index !== TABLE_HEAD.length - 1 && (
-                      <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
-                    )}
+                    {head}
                   </Typography>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {confirmedData?.map(
+            {shippedData?.map(
               ({ orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
-                const className = `py-3 px-5 ${key === confirmedData.length - 1
+                const className = `py-3 px-5 ${key === shippedData.length - 1
                   ? ""
                   : "border-b border-blue-gray-50"
                   }`;
                 return (
                   <tr key={`${orderid}_${key}`}>
                     <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
+                      <Typography
+                        className="text-xs font-semibold text-blue-gray-600">
                         {date}
                       </Typography>
                     </td>
                     <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
+                      <Typography
+                        className="text-xs font-semibold text-blue-gray-600">
                         {orderid}
                       </Typography>
                     </td>
                     <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
+                      <Typography
+                        className="text-xs font-semibold text-blue-gray-600">
                         {name}
                       </Typography>
                     </td>
                     <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
+                      <Typography
+                        className="text-xs font-semibold text-blue-gray-600">
                         {sku}
                       </Typography>
                     </td>
@@ -177,14 +175,16 @@ const Confirmed = () => {
                         {channelname}
                       </Typography>
                     </td>
-                  </tr>)
+                  </tr>
+                )
               }
             )}
           </tbody>
         </table>
       </CardBody>
+
     </div>
   )
 }
 
-export default Confirmed
+export default Intransit

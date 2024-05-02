@@ -88,13 +88,21 @@ export function Profile() {
     postalcode: '',
     city: '',
     state: '',
+    channelname: 'Custom Order'
   }
+  let oid = id;
   const updateProduct = async (product) => {
-    const res = await axios.patch(`http://localhost:8080/clients/${id}`, product);
+    if (id.charAt(0) === '#') {
+      oid = '%23' + id.slice(1);
+    }
+    const res = await axios.patch(`http://localhost:8080/clients/${oid}`, product);
     console.log(res.data);
   }
   const getClient = async () => {
-    const res = await axios.get(`http://localhost:8080/clients/${id}`);
+    if (id.charAt(0) === '#') {
+      oid = '%23' + id.slice(1);
+    }
+    const res = await axios.get(`http://localhost:8080/clients/${oid}`);
     setName(res.data.name);
     setEmail(res.data.email);
   }

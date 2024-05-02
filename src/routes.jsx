@@ -7,12 +7,14 @@ import {
   ShoppingBagIcon,
   PlusIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Orders, Shipped, Rto, Delivered, Office } from "@/pages/dashboard";
+import { Home, Orders, Shipped, Rto, Office } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import { ArrowUturnLeftIcon, BuildingOffice2Icon } from "@heroicons/react/24/outline";
 import Confirmed from "./pages/dashboard/orders/Confirmed";
 import WithoutAwb from "./pages/dashboard/orders/WithoutAwb";
 import New from "./pages/dashboard/orders/New";
+import Intransit from "./pages/dashboard/shipped/intransit";
+import Delivered from "./pages/dashboard/shipped/delivered";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -59,12 +61,19 @@ export const routes = [
         name: "Shipped",
         path: "/shipped",
         element: <Shipped />,
-      },
-      {
-        icon: <CheckIcon {...icon} />,
-        name: "Delivered",
-        path: "/delivered",
-        element: <Delivered />,
+        nestedRoutes: [
+          {
+            name: "Intransit",
+            value: "intransit",
+            path: "/intransit",
+            element: <Intransit />,
+          },
+          {
+            name: "Delivered",
+            value: "delivered",
+            path: "/delivered",
+            element: <Delivered />,
+          }]
       },
       {
         icon: <ArrowUturnLeftIcon {...icon} />,

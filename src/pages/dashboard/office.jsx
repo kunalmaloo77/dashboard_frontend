@@ -22,7 +22,6 @@ import { useState } from "react";
 
 export function Office() {
   let today = new Date();
-  console.log(today);
 
   let dd = today.getDate();
   let mm = today.getMonth() + 1;
@@ -82,6 +81,7 @@ export function Office() {
   const handleOpen = () => {
     setOpen(!open);
   }
+
   return (
     <>
       <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover	bg-center">
@@ -136,7 +136,7 @@ export function Office() {
               actions.resetForm();
             }}
           >
-            {({ values }) => (
+            {({ values, resetForm }) => (
               <Form>
                 <div className="container mx-auto mt-10">
                   <div>
@@ -238,6 +238,7 @@ export function Office() {
                       <Button
                         color="blue-gray"
                         className="mr-4"
+                        onClick={() => resetForm()}
                       >
                         Clear Form
                       </Button>

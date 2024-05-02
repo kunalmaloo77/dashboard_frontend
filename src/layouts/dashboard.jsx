@@ -43,7 +43,7 @@ export function Dashboard({ showToast }) {
                   {
                     nestedRoutes && nestedRoutes.map(({ path: nestedPath, element: nestedElement }) => {
                       return (
-                        <Route key={`/orders${nestedPath}`} path={`/orders${nestedPath}`} element={nestedElement} />
+                        <Route key={`${path}${nestedPath}`} path={`${path}${nestedPath}`} element={nestedElement} />
                       )
                     })
                   }

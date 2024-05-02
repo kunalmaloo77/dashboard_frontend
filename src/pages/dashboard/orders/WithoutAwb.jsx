@@ -1,21 +1,37 @@
-import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
+import { ChevronUpDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
 import { Button, CardBody, Spinner, Typography } from '@material-tailwind/react';
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react'
+import { CSVLink } from 'react-csv';
+import { Bounce, toast } from 'react-toastify';
 
 
-const WithoutAwb = ({ order, mykey, length }) => {
-  // const { orderid, name, sku, amount, quantity, mobilenumber, totalamount, _id, email, date, address, city, state, postalcode, channelname } = order;
-  const [loading, setLoading] = useState(false);
+const WithoutAwb = () => {
+
   const [withoutAwbData, setWithoutAwbData] = useState([]);
 
   const updateProduct = async (product, orderid) => {
-    setLoading(true);
-    const trunacatedoid = orderid.slice(1);
-    const res = await axios.patch(`http://localhost:8080/clients/awb/${trunacatedoid}`, product);
+    let oid = orderid;
+    if (orderid.charAt(0) === '#') {
+      oid = '%23' + orderid.slice(1);
+    }
+    try {
+      const trunacatedoid = orderid.slice(1);
+      const res = await axios.patch(`http://localhost:8080/clients/awb/${oid}`, product);
+      toast.success("Order Confirmed", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Bounce,
+      })
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    } catch (error) {
+      console.log(error);
+    }
+
     // console.log(res.data);
-    setLoading(false);
   }
 
   const getWithoutAwb = async () => {
@@ -30,10 +46,35 @@ const WithoutAwb = ({ order, mykey, length }) => {
     awb: '',
   }
 
+  const headers = [
+    { label: "Date", key: "date" },
+    { label: "ORDER ID", key: "orderid" },
+    { label: "NAME", key: "name" },
+    { label: "SKUS", key: "sku" },
+    { label: "AMOUNT", key: "amount" },
+    { label: "QUANTITY", key: "quantity" },
+    { label: "TOTAL AMOUNT", key: "totalamount" },
+    { label: "MOBILE NUMBER", key: "mobilenumber" },
+    { label: "EMAIL", key: "email" },
+    { label: "ADDRESS", key: "address" },
+    { label: "POSTAL CODE", key: "postalcode" },
+    { label: "CITY", key: "city" },
+    { label: "STATE", key: "state" },
+    { label: "CHANNEL NAME", key: "channelname" },
+  ];
+
+
   const TABLE_HEAD = ["date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   return (
     <div>
+      <div className='inline-block'>
+        <CSVLink data={withoutAwbData} headers={headers} filename={"withoutawb.csv"}>
+          <Button className="flex justify-center gap-2 mt-2 ml-4" size="md" color="green">
+            <FolderArrowDownIcon strokeWidth={2} className="h-6 w-6" />
+          </Button>
+        </CSVLink>
+      </div>
       <CardBody className="overflow-scroll px-0">
         <table className="mt-4 w-full min-w-max table-auto text-left">
           <thead>
@@ -156,45 +197,41 @@ const WithoutAwb = ({ order, mykey, length }) => {
                                     type="text"
                                     name="awb"
                                     id="awb"
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+                                    autoComplete="off"
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus: sm:text-sm sm:leading-6 px-2"
                                   />
                                 </div>
-                                <Button color="green" className="ml-4" type="submit">
-                                  {loading ? <Spinner className="h-4 w-4" /> : null}
-                                  SUBMIT
-                                </Button>
                               </div>
                             </Form>
                           </Formik>
                         </Typography>
-                      </td> : <div></div>) : <td>
-                      <Typography
-                        className="text-xs font-semibold text-blue-gray-600">
-                        <Formik
-                          initialValues={initialValues}
-                          onSubmit={(values) => {
-                            updateProduct(values, orderid);
-                          }}
-                        >
-                          <Form>
-                            <div className="flex">
-                              <div className="mt-2">
-                                <Field
-                                  type="text"
-                                  name="awb"
-                                  id="awb"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
-                                />
+                      </td> : <div></div>) :
+                      <td>
+                        <Typography
+                          className="text-xs font-semibold text-blue-gray-600">
+                          <Formik
+                            initialValues={initialValues}
+                            onSubmit={(values) => {
+                              updateProduct(values, orderid);
+                            }}
+                          >
+                            <Form>
+                              <div className="flex">
+                                <div className="mt-2">
+                                  <Field
+                                    type="text"
+                                    name="awb"
+                                    id="awb"
+                                    autoComplete="off"
+                                    autoFocus={true}
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus: sm:text-sm sm:leading-6 px-2"
+                                  />
+                                </div>
                               </div>
-                              <Button color="green" className="ml-4" type="submit">
-                                {loading ? <Spinner className="h-4 w-4" /> : null}
-                                SUBMIT
-                              </Button>
-                            </div>
-                          </Form>
-                        </Formik>
-                      </Typography>
-                    </td>}
+                            </Form>
+                          </Formik>
+                        </Typography>
+                      </td>}
                     <td className={className}>
                       <Typography
                         className="text-xs font-semibold text-blue-gray-600">
