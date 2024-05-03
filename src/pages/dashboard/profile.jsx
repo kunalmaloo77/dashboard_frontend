@@ -10,13 +10,17 @@ import {
   DialogBody,
   IconButton,
   Button,
+  PopoverHandler,
+  PopoverContent,
+  Popover,
 } from "@material-tailwind/react";
 import {
   HomeIcon,
   ChatBubbleLeftEllipsisIcon,
   Cog6ToothIcon,
+  ChevronUpIcon,
 } from "@heroicons/react/24/solid";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -27,10 +31,11 @@ export function Profile() {
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
+  const [town, setTown] = useState('');
   const [pincode, setPincode] = useState('');
   const { id } = useParams();
   const [open, setOpen] = useState(false);
-
+  const [showPincodeOptions, setshowPincodeOptions] = useState([]);
   // const latitudeRef = useRef(null);
   // const longitudeRef = useRef(null);
 
@@ -67,10 +72,9 @@ export function Profile() {
         if (pincode.length === 6) {
           const res = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
           const data = res.data[0].PostOffice[0];
-          console.log(res.data[0]);
+          setshowPincodeOptions(res.data[0].PostOffice);
           setCity(data.District);
           setState(data.State);
-          console.log('response from postal code api ->', res);
         }
       } catch (error) {
         console.log('error fetching postal code->', error);
@@ -88,6 +92,7 @@ export function Profile() {
     postalcode: '',
     city: '',
     state: '',
+    town: '',
     channelname: 'Custom Order'
   }
   let oid = id;
@@ -165,6 +170,7 @@ export function Profile() {
                   city: city,
                   state: state,
                   postalcode: pincode,
+                  town: town,
                 };
                 updateProduct(updatedValues);
                 actions.resetForm();
@@ -210,7 +216,6 @@ export function Profile() {
                               name="address"
                               id="street-address"
                               autoComplete="street-address"
-
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
                             />
                           </div>
@@ -231,6 +236,48 @@ export function Profile() {
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
                             />
                           </div>
+                          <div className="mt-4">
+                            <div>
+                              <div htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
+                                Town/Locality
+                              </div>
+                              <div className="mt-2">
+                                <div className="h-[2.25rem] flex justify-between items-center w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 px-2">
+                                  <div>
+                                    {
+                                      town ? town : <p className="text-blue-gray-500">Please Select you area</p>
+                                    }
+                                  </div>
+                                  <div>
+                                    <Popover placement="top">
+                                      <PopoverHandler>
+                                        <div>
+                                          <ChevronUpIcon className="h-4 w-4" />
+                                        </div>
+                                      </PopoverHandler>
+                                      <PopoverContent>
+                                        <ul className="overflow-y-auto max-h-32 w-64">
+                                          {
+                                            showPincodeOptions.length > 0 ? showPincodeOptions.map((pincodeOption) => {
+                                              return (
+                                                <li
+                                                  className='block w-full cursor-pointer select-none rounded-md px-3 pt-[9px] pb-2 text-start leading-tight transition-all hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900'
+                                                  onClick={() => setTown(pincodeOption.Name)}>
+                                                  {pincodeOption.Name}
+                                                </li>
+                                              )
+                                            }) : <li><p>No Pincode Found</p></li>
+                                          }
+                                        </ul>
+                                      </PopoverContent>
+                                    </Popover>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </div>
+
                         </div>
 
                         <div className="sm:col-span-2">

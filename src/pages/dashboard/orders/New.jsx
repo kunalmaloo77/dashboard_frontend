@@ -142,22 +142,14 @@ const New = () => {
                       </td>
                       {key > 0 ? (!(ordersData[key - 1]?.orderid === ordersData[key]?.orderid) ?
                         <td className={className}>
-                          <Typography
-                            as="a"
-                            href="#"
-                            className="text-xs font-semibold text-blue-gray-600"
-                          >
-                            <Link to={`/clients/${orderid}`}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            <Link to={`/clients/${oid}`}>
                               Click here
                             </Link>
                           </Typography>
                         </td> : <div></div>) :
                         <td className={className}>
-                          <Typography
-                            as="a"
-                            href="#"
-                            className="text-xs font-semibold text-blue-gray-600"
-                          >
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
                             <Link to={`/clients/${oid}`}>
                               Click here
                             </Link>
