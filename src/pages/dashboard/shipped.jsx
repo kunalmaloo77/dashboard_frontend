@@ -13,7 +13,7 @@ import ShippedTab from "@/widgets/layout/shippedtab";
 
 export function Shipped() {
 
-  const nestedRoutes = routes[0].pages[2].nestedRoutes;
+  const nestedRoutes = routes[0].pages[3].nestedRoutes;
 
   const [selected, setSelected] = useState(() => {
     return localStorage.getItem('selectedShippedTab') || null;
@@ -33,10 +33,10 @@ export function Shipped() {
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Members list
+                Shipped Orders list
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                See information about all members
+                See information about all shipped orders
               </Typography>
             </div>
           </div>

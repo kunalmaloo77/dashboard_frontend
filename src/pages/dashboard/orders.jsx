@@ -12,7 +12,7 @@ import OrderTab from "@/widgets/layout/ordertab";
 
 export function Orders() {
 
-  const nestedRoutes = routes[0].pages[1].nestedRoutes;
+  const nestedRoutes = routes[0].pages[2].nestedRoutes;
 
   const [selected, setSelected] = useState(() => {
     return localStorage.getItem('selectedTab') || null;
@@ -32,10 +32,10 @@ export function Orders() {
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Members list
+                Orders List
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                See information about all members
+                See information about all orders
               </Typography>
             </div>
           </div>

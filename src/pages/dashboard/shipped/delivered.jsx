@@ -44,8 +44,9 @@ const Delivered = () => {
     <div>
       <div className='inline-block'>
         <CSVLink data={deliveredData} headers={headers} filename={"delivered.csv"}>
-          <Button className="flex justify-center gap-2 mt-2 ml-4" size="md" color="green">
+          <Button className="flex items-center justify-center gap-2 mt-2 ml-4" size="md" color="green">
             <FolderArrowDownIcon strokeWidth={2} className="h-6 w-6" />
+            <p>Download File</p>
           </Button>
         </CSVLink>
       </div>

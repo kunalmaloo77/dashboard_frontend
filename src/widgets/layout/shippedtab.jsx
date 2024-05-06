@@ -9,7 +9,7 @@ import { CSVLink } from 'react-csv';
 import { FolderArrowDownIcon } from '@heroicons/react/24/solid';
 
 const ShippedTab = ({ selected, handleSelect }) => {
-  const nestedRoutes = routes[0].pages[2].nestedRoutes;
+  const nestedRoutes = routes[0].pages[3].nestedRoutes;
   const [selectedOption, setSelectedOption] = useState(() => {
     return localStorage.getItem('selectedOption') || null;
   });

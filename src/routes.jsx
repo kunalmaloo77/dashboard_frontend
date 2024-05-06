@@ -31,6 +31,12 @@ export const routes = [
         element: <Home />,
       },
       {
+        icon: <BuildingOffice2Icon {...icon} />,
+        name: "Manual Order",
+        path: "/office",
+        element: <Office />,
+      },
+      {
         icon: <ShoppingBagIcon {...icon} />,
         name: "Orders",
         path: "/orders",
@@ -43,7 +49,7 @@ export const routes = [
             element: <New />,
           },
           {
-            name: "WithoutAWB",
+            name: "Delivery",
             value: "withoutawb",
             path: "/withoutawb",
             element: <WithoutAwb />,
@@ -81,12 +87,7 @@ export const routes = [
         path: "/rto",
         element: <Rto />,
       },
-      {
-        icon: <BuildingOffice2Icon {...icon} />,
-        name: "Office",
-        path: "/office",
-        element: <Office />,
-      },
+
     ],
   },
   {

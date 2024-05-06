@@ -7,7 +7,7 @@ import { Bounce, Flip, toast } from 'react-toastify';
 import Uploadbutton from './uploadbutton';
 
 const OrderTab = ({ selected, handleSelect }) => {
-  const nestedRoutes = routes[0].pages[1].nestedRoutes;
+  const nestedRoutes = routes[0].pages[2].nestedRoutes;
   const [orderId, setOrderId] = useState('');
   const [awb, setAwb] = useState('');
   const [selectedOption, setSelectedOption] = useState(() => {

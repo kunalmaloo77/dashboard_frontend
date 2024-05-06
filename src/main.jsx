@@ -18,11 +18,11 @@ import { MaterialTailwindControllerProvider } from "@/context";
 import "../public/css/tailwind.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <HashRouter>
+  <BrowserRouter basename="/dashboard">
     <ThemeProvider>
       <MaterialTailwindControllerProvider>
         <App />
       </MaterialTailwindControllerProvider>
     </ThemeProvider>
-  </HashRouter>
+  </BrowserRouter>
 );

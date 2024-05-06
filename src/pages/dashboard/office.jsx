@@ -9,21 +9,21 @@ import {
   Button,
   DialogBody,
   Dialog,
-  IconButton,
 } from "@material-tailwind/react";
 import {
   HomeIcon,
   ChatBubbleLeftEllipsisIcon,
   Cog6ToothIcon,
+  TrashIcon,
+  PlusIcon,
 } from "@heroicons/react/24/solid";
 import { Field, FieldArray, Form, Formik } from "formik";
 import axios from "axios";
 import { useState } from "react";
+import { Flip, toast } from "react-toastify";
 
 export function Office() {
-  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
 
   let today = new Date();
 
@@ -70,21 +70,25 @@ export function Office() {
         const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/clients', flattenedData[i]);
         console.log(res.data);
       }
-      setMessage("Order Placed Successfully");
-      handleOpen();
+      toast.success("Order Placed Successfully", {
+        transition: Flip,
+        position: "top-center",
+        autoClose: 1000
+      })
     } catch (error) {
       if (error.response.status === 409) {
         console.log("Client Already exists", error);
-        setMessage(error.response.data.error);
+        toast.error("Client Already exists", {
+          transition: Flip,
+          position: "top-center",
+          autoClose: 1000
+        })
       }
       else {
         console.log("Registration error:", error);
       }
     }
     setLoading(false)
-  }
-  const handleOpen = () => {
-    setOpen(!open);
   }
 
   return (
@@ -195,14 +199,14 @@ export function Office() {
                       </div>
 
                       <div className="mt-8">
-                        <h2 className="text-lg font-semibold mb-2">SKU Information</h2>
+                        <h2 className="text-lg font-semibold mb-2">Product Information (SKU)</h2>
                         <FieldArray name="skus">
                           {
                             (fieldArrayProps) => {
                               return (
                                 <div>
                                   {values.skus.map((sku, index) => (
-                                    <div key={index} className="flex mb-4">
+                                    <div key={index} className="flex mb-4 items-center">
                                       <Field
                                         type="text"
                                         name={`skus.${index}.sku`}
@@ -231,20 +235,23 @@ export function Office() {
                                           sku.amount && sku.quantity ? <p>{sku.amount * sku.quantity}</p> : <p className="text-gray-400">Total Price</p>
                                         }
                                       </div>
-                                      <Button
-                                        onClick={() => fieldArrayProps.remove(index)}
-                                        color="red"
-                                      >
-                                        Delete
-                                      </Button>
+                                      <div>
+                                        <TrashIcon
+                                          className="h-4 w-4 cursor-pointer"
+                                          onClick={() => fieldArrayProps.remove(index)} />
+                                      </div>
                                     </div>
                                   ))}
                                   <Button
                                     type="button"
+                                    className="py-2 px-3"
                                     onClick={() => fieldArrayProps.insert(values.skus.length + 1, {})}
-                                    color="blue"
+                                    variant="outlined"
                                   >
-                                    Add Product
+                                    <div className="flex items-center">
+                                      <PlusIcon className="h-5 w-5" />
+                                      <p className="ml-2">Add Product</p>
+                                    </div>
                                   </Button>
                                 </div>
                               )
@@ -257,7 +264,7 @@ export function Office() {
                             className="mr-4"
                             onClick={() => resetForm()}
                           >
-                            Clear Form
+                            Reset
                           </Button>
                           <Button
                             type="submit"
@@ -273,13 +280,9 @@ export function Office() {
                   </Form>
                 )}
               </Formik>
-              <Dialog open={open} handler={handleOpen}>
-                <DialogBody>
-                  <h1 className="flex m-auto">{message}</h1>
-                </DialogBody>
-              </Dialog>
             </CardBody>
-          </Card></div>
+          </Card>
+        </div>
       }
 
 
