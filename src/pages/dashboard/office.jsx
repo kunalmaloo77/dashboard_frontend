@@ -21,6 +21,7 @@ import { Field, FieldArray, Form, Formik } from "formik";
 import axios from "axios";
 import { useState } from "react";
 import { Flip, toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export function Office() {
   const [loading, setLoading] = useState(false);
@@ -244,7 +245,7 @@ export function Office() {
                                   ))}
                                   <Button
                                     type="button"
-                                    className="py-2 px-3"
+                                    className="py-2 px-3 w-36"
                                     onClick={() => fieldArrayProps.insert(values.skus.length + 1, {})}
                                     variant="outlined"
                                   >
@@ -260,8 +261,7 @@ export function Office() {
                         </FieldArray>
                         <div className="mt-8">
                           <Button
-                            color="blue-gray"
-                            className="mr-4"
+                            className="mr-4 bg-gray-600 w-36"
                             onClick={() => resetForm()}
                           >
                             Reset
@@ -269,10 +269,19 @@ export function Office() {
                           <Button
                             type="submit"
                             color="green"
+                            className="mr-4 w-36"
                             variant="gradient"
                           >
                             Submit
                           </Button>
+                          <Link to="/dashboard/orders">
+                            <Button
+                              variant="gradient"
+                              className="mr-4 w-36"
+                            >
+                              Go to Orders
+                            </Button>
+                          </Link>
 
                         </div>
                       </div>
