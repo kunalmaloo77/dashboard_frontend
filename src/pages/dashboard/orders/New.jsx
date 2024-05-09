@@ -33,7 +33,6 @@ const New = () => {
     { label: "MOBILE NUMBER", key: "mobilenumber" },
     { label: "EMAIL", key: "email" },
   ];
-
   return (
     <div>
       <div>
