@@ -35,7 +35,7 @@ const OrderTab = ({ selected, handleSelect }) => {
   const handleShippedAwb = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/awb/single/${awb}`);
+      const res = await axios.get(`https://dashboard-backend-eight.vercel.app//clients/awb/single/${awb}`);
       toast.success("Order Shipped", {
         position: "top-center",
         autoClose: 500,
@@ -69,7 +69,7 @@ const OrderTab = ({ selected, handleSelect }) => {
     console.log("handle Shippped Orderid called");
     const oid = orderId.slice(1);
     try {
-      const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/orderid/single/${oid}`);
+      const res = await axios.get(`https://dashboard-backend-eight.vercel.app//clients/orderid/single/${oid}`);
       toast.success("Order Shipped", {
         position: "top-center",
         autoClose: 500,

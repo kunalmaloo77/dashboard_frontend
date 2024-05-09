@@ -11,7 +11,7 @@ const New = () => {
   const [loading, setLoading] = useState(false)
   const getOrders = async () => {
     setLoading(true);
-    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/orders');
+    const res = await axios.get('https://dashboard-backend-eight.vercel.app//clients/orders');
     setOrdersData(res.data);
     setLoading(false);
   }

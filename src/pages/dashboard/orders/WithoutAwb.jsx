@@ -19,7 +19,7 @@ const WithoutAwb = () => {
     }
     try {
       const trunacatedoid = orderid.slice(1);
-      const res = await axios.patch(`https://dashboard-backend-tw3m.onrender.com/clients/awb/${oid}`, product);
+      const res = await axios.patch(`https://dashboard-backend-eight.vercel.app//clients/awb/${oid}`, product);
       toast.success("Order Confirmed", {
         position: "top-center",
         autoClose: 1000,
@@ -37,7 +37,7 @@ const WithoutAwb = () => {
 
   const getWithoutAwb = async () => {
     setLoading(true)
-    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/withoutawb');
+    const res = await axios.get('https://dashboard-backend-eight.vercel.app//clients/withoutawb');
     setWithoutAwbData(res.data);
     setLoading(false);
   }

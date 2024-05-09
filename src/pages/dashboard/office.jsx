@@ -68,7 +68,7 @@ export function Office() {
     });
     try {
       for (let i = 0; i < flattenedData.length; i++) {
-        const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/clients', flattenedData[i]);
+        const res = await axios.post('https://dashboard-backend-eight.vercel.app//clients', flattenedData[i]);
         console.log(res.data);
       }
       toast.success("Order Placed Successfully", {
@@ -132,24 +132,7 @@ export function Office() {
                     </Typography>
                   </div>
                 </div>
-                <div className="w-96">
-                  <Tabs value="app">
-                    <TabsHeader>
-                      <Tab value="app">
-                        <HomeIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                        App
-                      </Tab>
-                      <Tab value="message">
-                        <ChatBubbleLeftEllipsisIcon className="-mt-0.5 mr-2 inline-block h-5 w-5" />
-                        Message
-                      </Tab>
-                      <Tab value="settings">
-                        <Cog6ToothIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                        Settings
-                      </Tab>
-                    </TabsHeader>
-                  </Tabs>
-                </div>
+
               </div>
               <Formik
                 initialValues={initialValues}
@@ -163,7 +146,7 @@ export function Office() {
                     <div className="container mx-auto mt-10">
                       <div>
                         <h2 className="text-lg font-semibold mb-2">Client Information</h2>
-                        <div className="flex mb-4">
+                        <div className="flex flex-col lg:flex-row mb-4 gap-2">
                           <Field
                             type="text"
                             name="orderid"
@@ -207,7 +190,7 @@ export function Office() {
                               return (
                                 <div>
                                   {values.skus.map((sku, index) => (
-                                    <div key={index} className="flex mb-4 items-center">
+                                    <div key={index} className="flex flex-col lg:flex-row lg:items-center mb-4 gap-2">
                                       <Field
                                         type="text"
                                         name={`skus.${index}.sku`}
@@ -231,7 +214,7 @@ export function Office() {
                                         placeholder="Quantity"
                                         className="mr-2 p-2 border rounded"
                                       />
-                                      <div className="mr-2 p-2 border rounded w-48">
+                                      <div className="mr-2 p-2 border rounded min-w-[12.5rem]">
                                         {
                                           sku.amount && sku.quantity ? <p>{sku.amount * sku.quantity}</p> : <p className="text-gray-400">Total Price</p>
                                         }
@@ -259,7 +242,7 @@ export function Office() {
                             }
                           }
                         </FieldArray>
-                        <div className="mt-8">
+                        <div className="mt-6 flex flex-col lg:flex-row gap-2 items-center">
                           <Button
                             className="mr-4 bg-gray-600 w-36"
                             onClick={() => resetForm()}
@@ -274,14 +257,14 @@ export function Office() {
                           >
                             Submit
                           </Button>
-                          <Link to="/dashboard/orders">
-                            <Button
-                              variant="gradient"
-                              className="mr-4 w-36"
-                            >
+                          <Button
+                            variant="gradient"
+                            className="mr-4 w-36"
+                          >
+                            <Link to="/dashboard/orders">
                               Go to Orders
-                            </Button>
-                          </Link>
+                            </Link>
+                          </Button>
 
                         </div>
                       </div>

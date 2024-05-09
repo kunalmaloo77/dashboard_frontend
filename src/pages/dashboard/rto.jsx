@@ -27,7 +27,7 @@ import { CSVLink } from "react-csv";
 export function Rto() {
   const [orders, setOrders] = useState([]);
   const getClients = async () => {
-    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/shipped');
+    const res = await axios.get('https://dashboard-backend-eight.vercel.app//clients/shipped');
     const flattenedData = [];
     (res.data).forEach(item => {
       item.skus.forEach(sku => {
