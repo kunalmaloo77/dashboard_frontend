@@ -11,11 +11,11 @@ const New = () => {
   const [loading, setLoading] = useState(false)
   const getOrders = async () => {
     setLoading(true);
-    const res = await axios.get('https://dashboard-backend-eight.vercel.app/clients/orders');
+    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/orders');
     setOrdersData(res.data);
     setLoading(false);
   }
-
+  console.log(ordersData);
   const TABLE_HEAD = ["date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", ""];
 
   useEffect(() => {

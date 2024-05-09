@@ -100,14 +100,14 @@ export function Profile() {
     if (id.charAt(0) === '#') {
       oid = '%23' + id.slice(1);
     }
-    const res = await axios.patch(`https://dashboard-backend-eight.vercel.app/clients/${oid}`, product);
+    const res = await axios.patch(`https://dashboard-backend-tw3m.onrender.com/clients/${oid}`, product);
     console.log(res.data);
   }
   const getClient = async () => {
     if (id.charAt(0) === '#') {
       oid = '%23' + id.slice(1);
     }
-    const res = await axios.get(`https://dashboard-backend-eight.vercel.app/clients/${oid}`);
+    const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/${oid}`);
     setName(res.data.name);
     setEmail(res.data.email);
   }
