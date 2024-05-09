@@ -68,7 +68,7 @@ export function Office() {
     });
     try {
       for (let i = 0; i < flattenedData.length; i++) {
-        const res = await axios.post('https://dashboard-backend-eight.vercel.app//clients', flattenedData[i]);
+        const res = await axios.post('https://dashboard-backend-eight.vercel.app/clients', flattenedData[i]);
         console.log(res.data);
       }
       toast.success("Order Placed Successfully", {

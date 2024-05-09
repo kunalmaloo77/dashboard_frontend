@@ -12,7 +12,7 @@ const Confirmed = () => {
   const getConfirmed = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('https://dashboard-backend-eight.vercel.app//clients/confirmed');
+      const res = await axios.get('https://dashboard-backend-eight.vercel.app/clients/confirmed');
       setConfirmedData(res.data);
     } catch (error) {
       console.log(error, "<-confirm error");

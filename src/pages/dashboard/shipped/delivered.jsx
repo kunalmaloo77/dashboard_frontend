@@ -11,7 +11,7 @@ const Delivered = () => {
   const [loading, setLoading] = useState(false)
   const getDelivered = async () => {
     setLoading(true);
-    const res = await axios.get('https://dashboard-backend-eight.vercel.app//clients/delivered');
+    const res = await axios.get('https://dashboard-backend-eight.vercel.app/clients/delivered');
     setDeliveredData(res.data);
     setLoading(false);
   }

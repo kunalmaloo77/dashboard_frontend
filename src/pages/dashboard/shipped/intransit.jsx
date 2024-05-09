@@ -11,7 +11,7 @@ const Intransit = () => {
   const [loading, setLoading] = useState(false)
   const getShipped = async () => {
     setLoading(true);
-    const res = await axios.get('https://dashboard-backend-eight.vercel.app//clients/shipped');
+    const res = await axios.get('https://dashboard-backend-eight.vercel.app/clients/shipped');
     setShippedData(res.data);
     setLoading(false);
   }
