@@ -257,14 +257,14 @@ export function Office() {
                           >
                             Submit
                           </Button>
-                          <Button
-                            variant="gradient"
-                            className="mr-4 w-36"
-                          >
-                            <Link to="/dashboard/orders">
+                          <Link to="/dashboard/orders">
+                            <Button
+                              variant="gradient"
+                              className="mr-4 w-36"
+                            >
                               Go to Orders
-                            </Link>
-                          </Button>
+                            </Button>
+                          </Link>
 
                         </div>
                       </div>

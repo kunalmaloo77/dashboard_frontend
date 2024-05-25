@@ -1,3 +1,4 @@
+import Pagination from '@/widgets/layout/pagination';
 import { ChevronUpDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
 import { Button, CardBody, Spinner, Typography } from '@material-tailwind/react';
 import axios from 'axios';
@@ -11,6 +12,14 @@ const WithoutAwb = () => {
 
   const [withoutAwbData, setWithoutAwbData] = useState([]);
   const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 50;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = withoutAwbData.slice(indexOfFirstItem, indexOfLastItem);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   const updateProduct = async (product, orderid) => {
     let oid = orderid;
@@ -67,7 +76,7 @@ const WithoutAwb = () => {
   ];
 
 
-  const TABLE_HEAD = ["date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
+  const TABLE_HEAD = ["order id", "date", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   return (
     <div>
@@ -91,176 +100,191 @@ const WithoutAwb = () => {
               </path>
             </svg>
           </div>
-        </div> : <CardBody className="overflow-scroll px-0">
-          <table className="mt-4 w-full min-w-max table-auto text-left">
-            <thead>
-              <tr>
-                {TABLE_HEAD.map((head, index) => (
-                  <th
-                    key={head}
-                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
-                  >
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
-                    >
-                      {head}{" "}
-                      {index !== TABLE_HEAD.length - 1 && (
-                        <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
-                      )}
-                    </Typography>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {withoutAwbData?.map(
-                ({ orderid, name, sku, amount, quantity, mobilenumber, totalamount, _id, email, date, address, city, state, postalcode, channelname }, key) => {
-                  const className = `py-3 px-5 ${key === withoutAwbData.length - 1
-                    ? ""
-                    : "border-b border-blue-gray-50"
-                    }`;
-                  return (
-                    <tr key={`${orderid}_${key}`}>
-                      <td className={className}>
+        </div> : (
+          <div>
+            <CardBody className="overflow-scroll px-0">
+              <table className="mt-4 w-full min-w-max table-auto text-left">
+                <thead>
+                  <tr>
+                    {TABLE_HEAD.map((head, index) => (
+                      <th
+                        key={head}
+                        className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
+                      >
                         <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {date}
+                          variant="small"
+                          color="blue-gray"
+                          className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                        >
+                          {head}{" "}
+                          {index !== TABLE_HEAD.length - 1 && (
+                            <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
+                          )}
                         </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {orderid}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {name}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {sku}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {amount}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {quantity}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {totalamount}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {mobilenumber}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {email}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {address}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {postalcode}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {city}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {state}
-                        </Typography>
-                      </td>
-                      {key > 0 ? (!(withoutAwbData[key - 1]?.orderid === withoutAwbData[key]?.orderid) ?
-                        <td>
-                          <Typography
-                            className="text-xs font-semibold text-blue-gray-600">
-                            <Formik
-                              initialValues={initialValues}
-                              onSubmit={(values) => {
-                                updateProduct(values, orderid);
-                              }}
-                            >
-                              <Form>
-                                <div className="flex">
-                                  <div className="mt-2">
-                                    <Field
-                                      type="text"
-                                      name="awb"
-                                      id="awb"
-                                      autoComplete="off"
-                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus: sm:text-sm sm:leading-6 px-2"
-                                    />
-                                  </div>
-                                </div>
-                              </Form>
-                            </Formik>
-                          </Typography>
-                        </td> : <div></div>) :
-                        <td>
-                          <Typography
-                            className="text-xs font-semibold text-blue-gray-600">
-                            <Formik
-                              initialValues={initialValues}
-                              onSubmit={(values) => {
-                                updateProduct(values, orderid);
-                              }}
-                            >
-                              <Form>
-                                <div className="flex">
-                                  <div className="mt-2">
-                                    <Field
-                                      type="text"
-                                      name="awb"
-                                      id="awb"
-                                      autoComplete="off"
-                                      autoFocus={true}
-                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus: sm:text-sm sm:leading-6 px-2"
-                                    />
-                                  </div>
-                                </div>
-                              </Form>
-                            </Formik>
-                          </Typography>
-                        </td>}
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {channelname}
-                        </Typography>
-                      </td>
-                    </tr>
-                  )
-                }
-              )}
-            </tbody>
-          </table>
-        </CardBody>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentItems?.map(
+                    ({ orderid, name, sku, amount, quantity, mobilenumber, totalamount, _id, email, date, address, city, state, postalcode, channelname }, key) => {
+                      const className = `py-3 px-5 ${key === currentItems.length - 1
+                        ? ""
+                        : "border-b border-blue-gray-50"
+                        }`;
+                      return (
+                        <tr key={`${orderid}_${key}`}>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {orderid}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {date}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {name}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {sku}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography className="text-xs font-semibold text-blue-gray-600">
+                              {amount}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography className="text-xs font-semibold text-blue-gray-600">
+                              {quantity}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography className="text-xs font-semibold text-blue-gray-600">
+                              {totalamount}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography className="text-xs font-semibold text-blue-gray-600">
+                              {mobilenumber}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography className="text-xs font-semibold text-blue-gray-600">
+                              {email}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {address}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {postalcode}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {city}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {state}
+                            </Typography>
+                          </td>
+                          {key > 0 ? (!(currentItems[key - 1]?.orderid === currentItems[key]?.orderid) ?
+                            <td className={`px-5 ${key === currentItems.length - 1
+                              ? ""
+                              : "border-b border-blue-gray-50"
+                              }`}>
+                              <Typography
+                                className="text-xs font-semibold text-blue-gray-600">
+                                <Formik
+                                  initialValues={initialValues}
+                                  onSubmit={(values) => {
+                                    updateProduct(values, orderid);
+                                  }}
+                                >
+                                  <Form>
+                                    <div className="flex">
+                                      <div>
+                                        <Field
+                                          type="text"
+                                          name="awb"
+                                          id="awb"
+                                          autoComplete="off"
+                                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus: sm:text-sm sm:leading-6 px-2"
+                                        />
+                                      </div>
+                                    </div>
+                                  </Form>
+                                </Formik>
+                              </Typography>
+                            </td> : <div></div>) :
+                            <td className={`px-5 ${key === currentItems.length - 1
+                              ? ""
+                              : "border-b border-blue-gray-50"
+                              }`}>
+                              <Typography
+                                className="text-xs font-semibold text-blue-gray-600">
+                                <Formik
+                                  initialValues={initialValues}
+                                  onSubmit={(values) => {
+                                    updateProduct(values, orderid);
+                                  }}
+                                >
+                                  <Form>
+                                    <div className="flex">
+                                      <div>
+                                        <Field
+                                          type="text"
+                                          name="awb"
+                                          id="awb"
+                                          autoComplete="off"
+                                          autoFocus={true}
+                                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus: sm:text-sm sm:leading-6 px-2"
+                                        />
+                                      </div>
+                                    </div>
+                                  </Form>
+                                </Formik>
+                              </Typography>
+                            </td>}
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {channelname}
+                            </Typography>
+                          </td>
+                        </tr>
+                      )
+                    }
+                  )}
+                </tbody>
+              </table>
+            </CardBody>
+            <Pagination
+              totalItems={withoutAwbData.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>)
       }
     </div>
   )

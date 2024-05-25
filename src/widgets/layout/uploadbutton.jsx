@@ -134,6 +134,89 @@ const Uploadbutton = () => {
       }, 1000);
     }
   }
+  const handleShopifySubmit = async () => {
+    setOpen(!open);
+    setSubmitType(null);
+    if (!file) {
+      toast.error("Please select a file to upload", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      });
+      return;
+    }
+    const formData = new FormData();
+    formData.append('csv', file);
+    try {
+      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/shopify', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+      console.log(res);
+      toast.success("File Uploaded Successfully", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      })
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      if (error.response.status === 400) {
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 1000,
+          transition: Flip
+        })
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  }
+
+  const handleDeliverySubmit = async () => {
+    setOpen(!open);
+    setSubmitType(null);
+    if (!file) {
+      toast.error("Please select a file to upload", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      });
+      return;
+    }
+    const formData = new FormData();
+    formData.append('csv', file);
+    try {
+      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/delivery', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+      console.log(res);
+      toast.success("File Uploaded Successfully", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      })
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      if (error.response.status === 400) {
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 1000,
+          transition: Flip
+        })
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  }
 
   const handleFileChange = async (e) => {
     setFile(e.target.files[0]);
@@ -150,6 +233,16 @@ const Uploadbutton = () => {
   const handleConfirmedFileChange = async (e) => {
     setFile(e.target.files[0]);
     setSubmitType('status');
+    handleOpen();
+  };
+  const handleShopifyFileChange = async (e) => {
+    setFile(e.target.files[0]);
+    setSubmitType('shopify');
+    handleOpen();
+  };
+  const handleDeliveryFileChange = async (e) => {
+    setFile(e.target.files[0]);
+    setSubmitType('delivery');
     handleOpen();
   };
 
@@ -205,6 +298,22 @@ const Uploadbutton = () => {
                 </div>
               </form>
             </li>
+            <li className='block w-full cursor-pointer select-none rounded-md px-3 pt-[9px] pb-2 text-start leading-tight transition-all hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900'>
+              <form onSubmit={handleShopifySubmit} encType="multipart/form-data">
+                <div className="flex">
+                  <label htmlFor='shopify-file-upload' className='cursor-pointer'>Shopify CSV</label>
+                  <input type="file" accept=".csv" onChange={handleShopifyFileChange} className="hidden" id='shopify-file-upload' />
+                </div>
+              </form>
+            </li>
+            <li className='block w-full cursor-pointer select-none rounded-md px-3 pt-[9px] pb-2 text-start leading-tight transition-all hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900'>
+              <form onSubmit={handleDeliverySubmit} encType="multipart/form-data">
+                <div className="flex">
+                  <label htmlFor='delivery-file-upload' className='cursor-pointer'>Delivery CSV</label>
+                  <input type="file" accept=".csv" onChange={handleDeliveryFileChange} className="hidden" id='delivery-file-upload' />
+                </div>
+              </form>
+            </li>
           </ul>
 
         </PopoverContent>
@@ -238,6 +347,18 @@ const Uploadbutton = () => {
           {
             submitType === 'status' &&
             <Button variant="gradient" color="green" onClick={handleConfirmedSubmit}>
+              <span>Confirm</span>
+            </Button>
+          }
+          {
+            submitType === 'shopify' &&
+            <Button variant="gradient" color="green" onClick={handleShopifySubmit}>
+              <span>Confirm</span>
+            </Button>
+          }
+          {
+            submitType === 'delivery' &&
+            <Button variant="gradient" color="green" onClick={handleDeliverySubmit}>
               <span>Confirm</span>
             </Button>
           }
