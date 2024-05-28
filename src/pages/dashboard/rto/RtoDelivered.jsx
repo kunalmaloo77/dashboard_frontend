@@ -1,29 +1,28 @@
-import OrderTab from '@/widgets/layout/ordertab';
-import { ChevronUpDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
-import { Button, CardBody, Typography } from '@material-tailwind/react';
+import { FolderArrowDownIcon } from '@heroicons/react/24/solid';
+import { Button, CardBody, Spinner, Typography } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { CSVLink } from 'react-csv';
-import { Link } from 'react-router-dom';
 
-const Delivered = () => {
-  const [deliveredData, setDeliveredData] = useState([]);
-  const [loading, setLoading] = useState(false)
-  const getDelivered = async () => {
+const RtoDelivered = () => {
+  const [rtoDeliveredData, setRTODeliveredData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getRTODelivered = async () => {
     setLoading(true);
-    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/delivered');
-    setDeliveredData(res.data);
+    const res = await axios.get('http://localhost:8080/clients/rtodelivered');
+    setRTODeliveredData(res.data);
     setLoading(false);
   }
 
   const TABLE_HEAD = ["unique_id", "date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   useEffect(() => {
-    getDelivered();
+    getRTODelivered();
   }, [])
 
   const headers = [
-    { label: "UniqueId", key: "unique_id" },
+    { label: "UniqueID", key: "unique_id" },
     { label: "Date", key: "date" },
     { label: "ORDER ID", key: "orderid" },
     { label: "NAME", key: "name" },
@@ -44,7 +43,7 @@ const Delivered = () => {
   return (
     <div>
       <div className='inline-block'>
-        <CSVLink data={deliveredData} headers={headers} filename={"delivered.csv"}>
+        <CSVLink data={rtoDeliveredData} headers={headers} filename={"rtodelivered.csv"}>
           <Button className="flex items-center justify-center gap-2 mt-2 ml-4" size="md" color="green">
             <FolderArrowDownIcon strokeWidth={2} className="h-6 w-6" />
             <p>Download File</p>
@@ -77,19 +76,16 @@ const Delivered = () => {
                       color="blue-gray"
                       className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
                     >
-                      {head}{" "}
-                      {index !== TABLE_HEAD.length - 1 && (
-                        <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
-                      )}
+                      {head}
                     </Typography>
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {deliveredData?.map(
+              {rtoDeliveredData?.map(
                 ({ unique_id, orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
-                  const className = `py-3 px-5 ${key === deliveredData.length - 1
+                  const className = `py-3 px-5 ${key === rtoDeliveredData.length - 1
                     ? ""
                     : "border-b border-blue-gray-50"
                     }`;
@@ -215,4 +211,4 @@ const Delivered = () => {
   )
 }
 
-export default Delivered
+export default RtoDelivered

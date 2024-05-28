@@ -148,7 +148,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/shopify', formData, {
+      const res = await axios.post('http://localhost:8080/upload/shopify', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -190,7 +190,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/delivery', formData, {
+      const res = await axios.post('http://localhost:8080/upload/delivery', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }

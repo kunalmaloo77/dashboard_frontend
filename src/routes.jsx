@@ -15,6 +15,8 @@ import WithoutAwb from "./pages/dashboard/orders/WithoutAwb";
 import New from "./pages/dashboard/orders/New";
 import Intransit from "./pages/dashboard/shipped/intransit";
 import Delivered from "./pages/dashboard/shipped/delivered";
+import RtoIntransit from "./pages/dashboard/rto/RtoIntransit";
+import RtoDelivered from "./pages/dashboard/rto/RtoDelivered";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -86,6 +88,20 @@ export const routes = [
         name: "RTO",
         path: "/rto",
         element: <Rto />,
+        nestedRoutes: [
+          {
+            name: "RTOIntransit",
+            value: "rtointransit",
+            path: "/rtointransit",
+            element: <RtoIntransit />,
+          },
+          {
+            name: "RTODelivered",
+            value: "rtodelivered",
+            path: "/rtodelivered",
+            element: <RtoDelivered />,
+          }
+        ]
       },
 
     ],

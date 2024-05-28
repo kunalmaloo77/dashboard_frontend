@@ -16,13 +16,14 @@ const Intransit = () => {
     setLoading(false);
   }
 
-  const TABLE_HEAD = ["date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
+  const TABLE_HEAD = ["unique_id", "date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   useEffect(() => {
     getShipped();
   }, [])
 
   const headers = [
+    { label: "UniqueID", key: "unique_id" },
     { label: "Date", key: "date" },
     { label: "ORDER ID", key: "orderid" },
     { label: "NAME", key: "name" },
@@ -84,13 +85,19 @@ const Intransit = () => {
             </thead>
             <tbody>
               {shippedData?.map(
-                ({ orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
+                ({ unique_id, orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
                   const className = `py-3 px-5 ${key === shippedData.length - 1
                     ? ""
                     : "border-b border-blue-gray-50"
                     }`;
                   return (
                     <tr key={`${orderid}_${key}`}>
+                      <td className={className}>
+                        <Typography
+                          className="text-xs font-semibold text-blue-gray-600">
+                          {unique_id}
+                        </Typography>
+                      </td>
                       <td className={className}>
                         <Typography
                           className="text-xs font-semibold text-blue-gray-600">
