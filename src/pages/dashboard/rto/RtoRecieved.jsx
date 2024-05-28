@@ -1,37 +1,39 @@
 import OrderTab from '@/widgets/layout/ordertab';
 import Pagination from '@/widgets/layout/pagination';
 import { ChevronUpDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
-import { Button, CardBody, Typography } from '@material-tailwind/react';
+import { Button, CardBody, CardFooter, Spinner, Typography } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { CSVLink } from 'react-csv';
-import { Link } from 'react-router-dom';
 
-const New = () => {
-  const [ordersData, setOrdersData] = useState([]);
+const RtoRecieved = () => {
+  const [rtoReievedData, setRTOData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 50;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = ordersData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = rtoReievedData.slice(indexOfFirstItem, indexOfLastItem);
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const getOrders = async () => {
+
+  const getRTORecieved = async () => {
     setLoading(true);
-    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/orders');
-    setOrdersData(res.data);
+    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtorecieved');
+    setRTOData(res.data);
     setLoading(false);
   }
-  const TABLE_HEAD = ["date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", ""];
+
+  const TABLE_HEAD = ["unique_id", "date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   useEffect(() => {
-    getOrders();
+    getRTORecieved();
   }, [])
 
   const headers = [
-    { label: "DATE", key: "date" },
+    { label: "UniqueID", key: "unique_id" },
+    { label: "Date", key: "date" },
     { label: "ORDER ID", key: "orderid" },
     { label: "NAME", key: "name" },
     { label: "SKUS", key: "sku" },
@@ -40,11 +42,18 @@ const New = () => {
     { label: "TOTAL AMOUNT", key: "totalamount" },
     { label: "MOBILE NUMBER", key: "mobilenumber" },
     { label: "EMAIL", key: "email" },
+    { label: "ADDRESS", key: "address" },
+    { label: "POSTAL CODE", key: "postalcode" },
+    { label: "CITY", key: "city" },
+    { label: "STATE", key: "state" },
+    { label: "AWB", key: "awb" },
+    { label: "CHANNEL NAME", key: "channelname" },
   ];
+
   return (
     <div>
-      <div>
-        <CSVLink data={ordersData} headers={headers} filename={"custom_orders.csv"}>
+      <div className='inline-block'>
+        <CSVLink data={rtoReievedData} headers={headers} filename={"rtointransit.csv"}>
           <Button className="flex items-center justify-center gap-2 mt-2 ml-4" size="md" color="green">
             <FolderArrowDownIcon strokeWidth={2} className="h-6 w-6" />
             <p>Download File</p>
@@ -79,10 +88,7 @@ const New = () => {
                           color="blue-gray"
                           className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
                         >
-                          {head}{" "}
-                          {index !== TABLE_HEAD.length - 1 && (
-                            <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
-                          )}
+                          {head}
                         </Typography>
                       </th>
                     ))}
@@ -90,17 +96,19 @@ const New = () => {
                 </thead>
                 <tbody>
                   {currentItems?.map(
-                    ({ orderid, name, sku, amount, quantity, mobilenumber, totalamount, _id, email, date }, key) => {
-                      let oid = orderid;
-                      if (orderid.charAt(0) === '#') {
-                        oid = '%23' + orderid.slice(1);
-                      }
+                    ({ unique_id, orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
                       const className = `py-3 px-5 ${key === currentItems.length - 1
                         ? ""
                         : "border-b border-blue-gray-50"
                         }`;
                       return (
                         <tr key={`${orderid}_${key}`}>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {unique_id}
+                            </Typography>
+                          </td>
                           <td className={className}>
                             <Typography
                               className="text-xs font-semibold text-blue-gray-600">
@@ -150,36 +158,71 @@ const New = () => {
                               {email}
                             </Typography>
                           </td>
-                          {key > 0 ? (!(ordersData[key - 1]?.orderid === ordersData[key]?.orderid) ?
-                            <td className={className}>
-                              <Typography className="text-xs font-semibold text-blue-gray-600">
-                                <Link to={`/clients/${oid}`}>
-                                  Click here
-                                </Link>
-                              </Typography>
-                            </td> : <div></div>) :
-                            <td className={className}>
-                              <Typography className="text-xs font-semibold text-blue-gray-600">
-                                <Link to={`/clients/${oid}`}>
-                                  Click here
-                                </Link>
-                              </Typography>
-                            </td>
-                          }
-                        </tr>)
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {address}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              as="a"
+                              href="#"
+                              className="text-xs font-semibold text-blue-gray-600"
+                            >
+                              {postalcode}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              as="a"
+                              href="#"
+                              className="text-xs font-semibold text-blue-gray-600"
+                            >
+                              {city}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              as="a"
+                              href="#"
+                              className="text-xs font-semibold text-blue-gray-600"
+                            >
+                              {state}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              as="a"
+                              href="#"
+                              className="text-xs font-semibold text-blue-gray-600"
+                            >
+                              {awb}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              as="a"
+                              href="#"
+                              className="text-xs font-semibold text-blue-gray-600"
+                            >
+                              {channelname}
+                            </Typography>
+                          </td>
+                        </tr>
+                      )
                     }
                   )}
                 </tbody>
               </table>
             </CardBody>
             <Pagination
-              totalItems={ordersData.length}
+              totalItems={rtoReievedData.length}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               onPageChange={handlePageChange}
             />
-          </div>
-        )
+          </div>)
       }
 
 
@@ -187,4 +230,4 @@ const New = () => {
   )
 }
 
-export default New
+export default RtoRecieved

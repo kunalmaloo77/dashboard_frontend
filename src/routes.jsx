@@ -17,6 +17,7 @@ import Intransit from "./pages/dashboard/shipped/intransit";
 import Delivered from "./pages/dashboard/shipped/delivered";
 import RtoIntransit from "./pages/dashboard/rto/RtoIntransit";
 import RtoDelivered from "./pages/dashboard/rto/RtoDelivered";
+import RtoRecieved from "./pages/dashboard/rto/RtoRecieved";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -90,16 +91,22 @@ export const routes = [
         element: <Rto />,
         nestedRoutes: [
           {
-            name: "RTOIntransit",
+            name: "Return Intransit",
             value: "rtointransit",
             path: "/rtointransit",
             element: <RtoIntransit />,
           },
           {
-            name: "RTODelivered",
+            name: "Return Delivered",
             value: "rtodelivered",
             path: "/rtodelivered",
             element: <RtoDelivered />,
+          },
+          {
+            name: "Return Recieved",
+            value: "rtorecieved",
+            path: "/rtorecieved",
+            element: <RtoRecieved />,
           }
         ]
       },

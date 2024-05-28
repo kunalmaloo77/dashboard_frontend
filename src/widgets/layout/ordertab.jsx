@@ -66,7 +66,6 @@ const OrderTab = ({ selected, handleSelect }) => {
 
   const handleShippedOrderID = async (e) => {
     e.preventDefault();
-    console.log("handle Shippped Orderid called");
     const oid = orderId.slice(1);
     try {
       const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/orderid/single/${oid}`);
@@ -79,7 +78,7 @@ const OrderTab = ({ selected, handleSelect }) => {
         window.location.reload();
       }, 500);
     } catch (error) {
-      console.log("AWB Shipping Error->", error);
+      console.log("OrderID Shipping Error->", error);
       if (error.response.status === 404) {
         toast.error("OrderID not found", {
           position: "top-center",
