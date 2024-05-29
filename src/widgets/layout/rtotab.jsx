@@ -36,7 +36,7 @@ const RtoTab = ({ selected, handleSelect }) => {
   const handleRecievedAwb = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get(`http://localhost:8080/clients/awb/status/${awb}`);
+      const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/awb/status/${awb}`);
       toast.success("Recieved", {
         position: "top-center",
         autoClose: 500,
@@ -69,7 +69,7 @@ const RtoTab = ({ selected, handleSelect }) => {
     e.preventDefault();
     const oid = orderId.slice(1);
     try {
-      const res = await axios.get(`http://localhost:8080/clients/orderid/status/${oid}`);
+      const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/orderid/status/${oid}`);
       toast.success("Recieved", {
         position: "top-center",
         autoClose: 500,
