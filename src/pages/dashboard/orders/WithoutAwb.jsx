@@ -13,7 +13,7 @@ const WithoutAwb = () => {
   const [withoutAwbData, setWithoutAwbData] = useState([]);
   const [loading, setLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const itemsPerPage = 20;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = withoutAwbData.slice(indexOfFirstItem, indexOfLastItem);

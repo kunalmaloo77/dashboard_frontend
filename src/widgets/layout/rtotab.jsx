@@ -1,13 +1,16 @@
 import routes from '@/routes';
-import { Input, Tab, Tabs, TabsHeader } from '@material-tailwind/react';
+import { Button, Input, Tab, Tabs, TabsHeader } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 import Uploadbutton from './uploadbutton';
+import axios from 'axios';
+import { Bounce, toast } from 'react-toastify';
 
 const RtoTab = ({ selected, handleSelect }) => {
   const nestedRoutes = routes[0].pages[4].nestedRoutes;
   const [orderId, setOrderId] = useState('');
   const [awb, setAwb] = useState('');
+
   const [selectedOption, setSelectedOption] = useState(() => {
     return localStorage.getItem('selectedOption') || null;
   });
@@ -33,7 +36,7 @@ const RtoTab = ({ selected, handleSelect }) => {
   const handleRecievedAwb = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/awb/status/${awb}`);
+      const res = await axios.get(`http://localhost:8080/clients/awb/status/${awb}`);
       toast.success("Recieved", {
         position: "top-center",
         autoClose: 500,
@@ -66,7 +69,7 @@ const RtoTab = ({ selected, handleSelect }) => {
     e.preventDefault();
     const oid = orderId.slice(1);
     try {
-      const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/orderid/status/${oid}`);
+      const res = await axios.get(`http://localhost:8080/clients/orderid/status/${oid}`);
       toast.success("Recieved", {
         position: "top-center",
         autoClose: 500,
@@ -99,14 +102,14 @@ const RtoTab = ({ selected, handleSelect }) => {
     <>
       <div className="flex justify-between gap-4">
         <div>
-          <Tabs value={selected} className="w-full md:w-[550px]">
+          <Tabs value={selected} className="w-full">
             <TabsHeader>
               {nestedRoutes.map(({ name, value, path }) => (
-                <Tab key={value} value={value} onClick={() => handleSelect(value)}>
-                  <NavLink to={`/dashboard/rto${path}`}>
+                <NavLink to={`/dashboard/rto${path}`}>
+                  <Tab key={value} value={value} onClick={() => handleSelect(value)}>
                     &nbsp;&nbsp;{name}&nbsp;&nbsp;
-                  </NavLink>
-                </Tab>
+                  </Tab>
+                </NavLink>
               ))}
             </TabsHeader>
           </Tabs>

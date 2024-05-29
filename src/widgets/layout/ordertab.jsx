@@ -1,9 +1,9 @@
 import routes from '@/routes';
-import { Button, Input, Tab, Tabs, TabsHeader } from '@material-tailwind/react';
+import { Input, Tab, Tabs, TabsHeader } from '@material-tailwind/react';
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
-import { Bounce, Flip, toast } from 'react-toastify';
+import { Bounce, toast } from 'react-toastify';
 import Uploadbutton from './uploadbutton';
 
 const OrderTab = ({ selected, handleSelect }) => {
@@ -62,7 +62,7 @@ const OrderTab = ({ selected, handleSelect }) => {
         window.location.reload();
       }, 1000);
     }
-  };
+  }
 
   const handleShippedOrderID = async (e) => {
     e.preventDefault();
@@ -104,16 +104,16 @@ const OrderTab = ({ selected, handleSelect }) => {
           <Tabs value={selected} className="w-full md:w-max">
             <TabsHeader>
               {nestedRoutes.map(({ name, value, path }) => (
-                <Tab key={value} value={value} onClick={() => handleSelect(value)}>
-                  <NavLink to={`/dashboard/orders${path}`}>
+                <NavLink to={`/dashboard/orders${path}`}>
+                  <Tab key={value} value={value} onClick={() => handleSelect(value)}>
                     &nbsp;&nbsp;{name}&nbsp;&nbsp;
-                  </NavLink>
-                </Tab>
+                  </Tab>
+                </NavLink>
               ))}
             </TabsHeader>
           </Tabs>
           {
-            selected === 'confirmed' &&
+            selected === 'ready-to-ship' &&
             <div>
               <div className="relative flex w-full max-w-[24rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md mb-4">
                 <nav className="flex min-w-[240px] flex-row gap-1 p-2 font-sans text-base font-normal text-blue-gray-700">

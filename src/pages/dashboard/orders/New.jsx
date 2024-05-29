@@ -11,7 +11,7 @@ const New = () => {
   const [ordersData, setOrdersData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = ordersData.slice(indexOfFirstItem, indexOfLastItem);

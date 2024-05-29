@@ -1,4 +1,5 @@
 import OrderTab from '@/widgets/layout/ordertab';
+import Pagination from '@/widgets/layout/pagination';
 import { ChevronUpDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
 import { Button, CardBody, Spinner, Typography } from '@material-tailwind/react';
 import axios from 'axios';
@@ -8,7 +9,16 @@ import { Link } from 'react-router-dom';
 
 const Intransit = () => {
   const [shippedData, setShippedData] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = shippedData
+    .slice(indexOfFirstItem, indexOfLastItem);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   const getShipped = async () => {
     setLoading(true);
     const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/shipped');
@@ -63,148 +73,158 @@ const Intransit = () => {
               </path>
             </svg>
           </div>
-        </div> : <CardBody className="overflow-scroll px-0">
-          <table className="w-full min-w-max table-auto text-left">
-            <thead>
-              <tr>
-                {TABLE_HEAD.map((head, index) => (
-                  <th
-                    key={head}
-                    className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
-                  >
-                    <Typography
-                      variant="small"
-                      color="blue-gray"
-                      className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+        </div> : (<div>
+          <CardBody className="overflow-scroll px-0">
+            <table className="w-full min-w-max table-auto text-left">
+              <thead>
+                <tr>
+                  {TABLE_HEAD.map((head, index) => (
+                    <th
+                      key={head}
+                      className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
                     >
-                      {head}
-                    </Typography>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {shippedData?.map(
-                ({ unique_id, orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
-                  const className = `py-3 px-5 ${key === shippedData.length - 1
-                    ? ""
-                    : "border-b border-blue-gray-50"
-                    }`;
-                  return (
-                    <tr key={`${orderid}_${key}`}>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {unique_id}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {date}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {orderid}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {name}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {sku}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {amount}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {quantity}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {totalamount}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {mobilenumber}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {email}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          className="text-xs font-semibold text-blue-gray-600">
-                          {address}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          as="a"
-                          href="#"
-                          className="text-xs font-semibold text-blue-gray-600"
-                        >
-                          {postalcode}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          as="a"
-                          href="#"
-                          className="text-xs font-semibold text-blue-gray-600"
-                        >
-                          {city}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          as="a"
-                          href="#"
-                          className="text-xs font-semibold text-blue-gray-600"
-                        >
-                          {state}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          as="a"
-                          href="#"
-                          className="text-xs font-semibold text-blue-gray-600"
-                        >
-                          {awb}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography
-                          as="a"
-                          href="#"
-                          className="text-xs font-semibold text-blue-gray-600"
-                        >
-                          {channelname}
-                        </Typography>
-                      </td>
-                    </tr>
-                  )
-                }
-              )}
-            </tbody>
-          </table>
-        </CardBody>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                      >
+                        {head}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {currentItems?.map(
+                  ({ unique_id, orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
+                    const className = `py-3 px-5 ${key === currentItems.length - 1
+                      ? ""
+                      : "border-b border-blue-gray-50"
+                      }`;
+                    return (
+                      <tr key={`${orderid}_${key}`}>
+                        <td className={className}>
+                          <Typography
+                            className="text-xs font-semibold text-blue-gray-600">
+                            {unique_id}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            className="text-xs font-semibold text-blue-gray-600">
+                            {date}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            className="text-xs font-semibold text-blue-gray-600">
+                            {orderid}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            className="text-xs font-semibold text-blue-gray-600">
+                            {name}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            className="text-xs font-semibold text-blue-gray-600">
+                            {sku}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {amount}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {quantity}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {totalamount}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {mobilenumber}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {email}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            className="text-xs font-semibold text-blue-gray-600">
+                            {address}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            as="a"
+                            href="#"
+                            className="text-xs font-semibold text-blue-gray-600"
+                          >
+                            {postalcode}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            as="a"
+                            href="#"
+                            className="text-xs font-semibold text-blue-gray-600"
+                          >
+                            {city}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            as="a"
+                            href="#"
+                            className="text-xs font-semibold text-blue-gray-600"
+                          >
+                            {state}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            as="a"
+                            href="#"
+                            className="text-xs font-semibold text-blue-gray-600"
+                          >
+                            {awb}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            as="a"
+                            href="#"
+                            className="text-xs font-semibold text-blue-gray-600"
+                          >
+                            {channelname}
+                          </Typography>
+                        </td>
+                      </tr>
+                    )
+                  }
+                )}
+              </tbody>
+            </table>
+          </CardBody>
+          <Pagination
+            totalItems={shippedData.length}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        </div>)
+
+
       }
 
 

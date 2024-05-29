@@ -52,14 +52,14 @@ export const routes = [
             element: <New />,
           },
           {
-            name: "Delivery",
+            name: "Confirmed",
             value: "withoutawb",
             path: "/withoutawb",
             element: <WithoutAwb />,
           },
           {
-            name: "Confirmed",
-            value: "confirmed",
+            name: "Ready to Ship",
+            value: "ready-to-ship",
             path: "/confirmed",
             element: <Confirmed />,
           },

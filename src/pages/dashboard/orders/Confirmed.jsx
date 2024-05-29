@@ -10,7 +10,7 @@ const Confirmed = () => {
   const [confirmedData, setConfirmedData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false)
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = confirmedData.slice(indexOfFirstItem, indexOfLastItem);
