@@ -20,7 +20,7 @@ const RtoRecieved = () => {
 
   const getRTORecieved = async () => {
     setLoading(true);
-    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/rtorecieved');
+    const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtorecieved');
     setRTOData(res.data);
     setLoading(false);
   }
