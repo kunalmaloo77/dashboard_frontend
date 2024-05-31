@@ -40,7 +40,7 @@ const OrderTab = ({ selected, handleSelect }) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:8080/clients');
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients');
       setAllData(res.data);
       setLoading(false);
     } catch (error) {
