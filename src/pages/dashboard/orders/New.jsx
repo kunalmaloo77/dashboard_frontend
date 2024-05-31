@@ -1,7 +1,7 @@
-import OrderTab from '@/widgets/layout/ordertab';
 import Pagination from '@/widgets/layout/pagination';
-import { ChevronUpDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
-import { Button, CardBody, Typography } from '@material-tailwind/react';
+import DateRange from '@/widgets/utils/date-range';
+import { ChevronUpDownIcon, CloudArrowDownIcon } from '@heroicons/react/20/solid';
+import { Button, CardBody, Dialog, DialogBody, DialogFooter, DialogHeader, Typography } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { CSVLink } from 'react-csv';
@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 
 const New = () => {
   const [ordersData, setOrdersData] = useState([]);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
@@ -41,29 +42,38 @@ const New = () => {
     { label: "MOBILE NUMBER", key: "mobilenumber" },
     { label: "EMAIL", key: "email" },
   ];
+  const handleOpen = () => {
+    setOpen(!open);
+  }
   return (
     <div>
-      <div>
-        <CSVLink data={ordersData} headers={headers} filename={"custom_orders.csv"}>
-          <Button className="flex items-center justify-center gap-2 mt-2 ml-4" size="md" color="green">
-            <FolderArrowDownIcon strokeWidth={2} className="h-6 w-6" />
-            <p>Download File</p>
-          </Button>
-        </CSVLink>
+      <div className='flex gap-2 mt-2'>
+        <div>
+          <Button onClick={handleOpen} className='ml-4'>Date</Button>
+        </div>
+        <div>
+          <CSVLink data={ordersData} headers={headers} filename={"custom_orders.csv"}>
+            <Button className="flex items-center justify-center gap-2 ml-4" color="green">
+              <CloudArrowDownIcon className='h-[1.1rem]' />
+              <p>Download File</p>
+            </Button>
+          </CSVLink>
+        </div>
       </div>
       {
-        loading ? <div class="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
-          <div class="flex items-center">
-            <span class="text-3xl mr-4">Loading</span>
-            <svg class="animate-spin h-8 w-8 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none"
-              viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path>
-            </svg>
-          </div>
-        </div> : (
+        loading ?
+          <div className="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
+            <div className="flex items-center">
+              <span className="text-3xl mr-4">Loading</span>
+              <svg className="animate-spin h-8 w-8 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path className="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
+              </svg>
+            </div>
+          </div> :
           <div>
             <CardBody className="overflow-scroll px-0">
               <table className="w-full min-w-max table-auto text-left">
@@ -141,14 +151,19 @@ const New = () => {
                             </Typography>
                           </td>
                           <td className={className}>
-                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                              {mobilenumber}
-                            </Typography>
+                            {mobilenumber &&
+                              <Typography className="text-xs font-semibold text-blue-gray-600">
+                                {mobilenumber}
+                              </Typography>
+                            }
                           </td>
                           <td className={className}>
-                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                              {email}
-                            </Typography>
+                            {
+                              email &&
+                              <Typography className="text-xs font-semibold text-blue-gray-600">
+                                {email}
+                              </Typography>
+                            }
                           </td>
                           {key > 0 ? (!(ordersData[key - 1]?.orderid === ordersData[key]?.orderid) ?
                             <td className={className}>
@@ -178,11 +193,32 @@ const New = () => {
               currentPage={currentPage}
               onPageChange={handlePageChange}
             />
+            <Dialog open={open} handler={handleOpen}>
+              <DialogHeader>Pick Up Date Range</DialogHeader>
+              <DialogBody>
+                <DateRange />
+              </DialogBody>
+              <DialogFooter>
+                <Button
+                  variant="text"
+                  color="red"
+                  onClick={handleOpen}
+                  className="mr-1"
+                >
+                  <span>Cancel</span>
+                </Button>
+                <Button
+                  variant='gradient'
+                  color="green"
+                  onClick={handleOpen}
+                  className="mr-1"
+                >
+                  <span>Submit</span>
+                </Button>
+              </DialogFooter>
+            </Dialog>
           </div>
-        )
       }
-
-
     </div>
   )
 }
