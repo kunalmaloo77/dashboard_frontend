@@ -249,7 +249,7 @@ const OrderTab = ({ selected, handleSelect }) => {
                   <span class="sr-only">Loading...</span>
                 </div> :
                 <CloudArrowDownIcon className='h-[1.1rem]' />}
-              <p>Download All Orders</p>
+              <p>{Loading ? "In Progress" : "Download All Orders"}</p>
             </Button>
           )}
         </div>

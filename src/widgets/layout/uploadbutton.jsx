@@ -190,7 +190,91 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const res = await axios.post('http://localhost:8080/upload/delivery', formData, {
+      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/delivery', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+      console.log(res);
+      toast.success("File Uploaded Successfully", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      })
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      if (error.response.status === 400) {
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 1000,
+          transition: Flip
+        })
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  }
+
+  const handlePagazoSubmit = async () => {
+    setOpen(!open);
+    setSubmitType(null);
+    if (!file) {
+      toast.error("Please select a file to upload", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      });
+      return;
+    }
+    const formData = new FormData();
+    formData.append('csv', file);
+    try {
+      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/pagazo', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+      console.log(res);
+      toast.success("File Uploaded Successfully", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      })
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      if (error.response.status === 400) {
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 1000,
+          transition: Flip
+        })
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  }
+
+  const handleDealsHunterSubmit = async () => {
+    setOpen(!open);
+    setSubmitType(null);
+    if (!file) {
+      toast.error("Please select a file to upload", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      });
+      return;
+    }
+    const formData = new FormData();
+    formData.append('csv', file);
+    try {
+      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/dealshunter', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -243,6 +327,18 @@ const Uploadbutton = () => {
   const handleDeliveryFileChange = async (e) => {
     setFile(e.target.files[0]);
     setSubmitType('delivery');
+    handleOpen();
+  };
+
+  const handlePagazoFileChange = async (e) => {
+    setFile(e.target.files[0])
+    setSubmitType('pagazo');
+    handleOpen();
+  };
+
+  const handleDealsHunterFileChange = async (e) => {
+    setFile(e.target.files[0])
+    setSubmitType('dealshunter');
     handleOpen();
   };
 
@@ -314,6 +410,22 @@ const Uploadbutton = () => {
                 </div>
               </form>
             </li>
+            <li className='block w-full cursor-pointer select-none rounded-md px-3 pt-[9px] pb-2 text-start leading-tight transition-all hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900'>
+              <form onSubmit={handlePagazoSubmit} encType="multipart/form-data">
+                <div className="flex">
+                  <label htmlFor='pagazo-file-upload' className='cursor-pointer'>Pagazo CSV</label>
+                  <input type="file" accept=".csv" onChange={handlePagazoFileChange} className='hidden' id='pagazo-file-upload' />
+                </div>
+              </form>
+            </li>
+            <li className='block w-full cursor-pointer select-none rounded-md px-3 pt-[9px] pb-2 text-start leading-tight transition-all hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900'>
+              <form onSubmit={handleDealsHunterSubmit} encType="multipart/form-data">
+                <div className="flex">
+                  <label htmlFor='dealshunter-file-upload' className='cursor-pointer'>Deals HUnter CSV</label>
+                  <input type="file" accept=".csv" onChange={handleDealsHunterFileChange} className='hidden' id='dealshunter-file-upload' />
+                </div>
+              </form>
+            </li>
           </ul>
 
         </PopoverContent>
@@ -359,6 +471,18 @@ const Uploadbutton = () => {
           {
             submitType === 'delivery' &&
             <Button variant="gradient" color="green" onClick={handleDeliverySubmit}>
+              <span>Confirm</span>
+            </Button>
+          }
+          {
+            submitType === 'pagazo' &&
+            <Button variant="gradient" color="green" onClick={handlePagazoSubmit}>
+              <span>Confirm</span>
+            </Button>
+          }
+          {
+            submitType === 'dealshunter' &&
+            <Button variant="gradient" color="green" onClick={handleDealsHunterSubmit}>
               <span>Confirm</span>
             </Button>
           }
