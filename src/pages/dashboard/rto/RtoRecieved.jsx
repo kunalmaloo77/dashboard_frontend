@@ -22,7 +22,7 @@ const RtoRecieved = () => {
   const getRTORecieved = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:8080/clients/rtorecieved');
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtorecieved');
       setRTOData(res.data.rtoRecieved);
       setTotalPages(res.data.totalPages);
       setLoading(false);
@@ -60,7 +60,7 @@ const RtoRecieved = () => {
   const downloadRtoRecievedOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('http://localhost:8080/clients/rtorecieved', {
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtorecieved', {
         params: {
           limit: totalPages * rtoReievedData.length,
         }

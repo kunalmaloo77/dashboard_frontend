@@ -22,7 +22,7 @@ const RtoIntransit = () => {
   const getRTO = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:8080/clients/rtointransit');
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtointransit');
       setRTOData(res.data.rtointransit);
       setTotalPages(res.data.totalPages);
       setLoading(false);
@@ -60,7 +60,7 @@ const RtoIntransit = () => {
   const downloadRtoIntransitOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('http://localhost:8080/clients/rtointransit', {
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtointransit', {
         params: {
           limit: totalPages * rtoData.length,
         }

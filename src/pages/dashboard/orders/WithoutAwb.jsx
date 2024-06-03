@@ -47,7 +47,7 @@ const WithoutAwb = () => {
   const getWithoutAwb = async () => {
     try {
       setLoading(true)
-      const res = await axios.get('http://localhost:8080/clients/withoutawb', {
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/withoutawb', {
         params: {
           page: currentPage,
         }
@@ -88,7 +88,7 @@ const WithoutAwb = () => {
   const downloadWithoutAwbOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('http://localhost:8080/clients/withoutawb', {
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/withoutawb', {
         params: {
           limit: totalPages * withoutAwbData.length,
         }

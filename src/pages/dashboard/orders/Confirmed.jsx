@@ -23,7 +23,7 @@ const Confirmed = () => {
   const getConfirmed = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:8080/clients/confirmed', {
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/confirmed', {
         params: {
           page: currentPage,
         }
@@ -40,7 +40,7 @@ const Confirmed = () => {
   const downloadConfirmedOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('http://localhost:8080/clients/confirmed', {
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/confirmed', {
         params: {
           limit: totalPages * confirmedData.length,
         }

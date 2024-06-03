@@ -21,7 +21,7 @@ const Delivered = () => {
   const getDelivered = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:8080/clients/delivered');
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/delivered');
       setDeliveredData(res.data.delivered);
       setTotalPages(res.data.totalPages);
       setLoading(false);
@@ -59,7 +59,7 @@ const Delivered = () => {
   const downloadDeliveredOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('http://localhost:8080/clients/delivered', {
+      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/delivered', {
         params: {
           limit: totalPages * deliveredData.length,
         }
