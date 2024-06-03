@@ -97,6 +97,7 @@ const OrderTab = ({ selected, handleSelect }) => {
     { label: "STATE", key: "state" },
     { label: "AWB", key: "awb" },
     { label: "CHANNEL NAME", key: "channelname" },
+    { label: "STATUS", key: "status" },
   ];
 
   const handleShippedOrderID = async (e) => {
