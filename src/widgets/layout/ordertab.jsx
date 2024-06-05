@@ -80,6 +80,46 @@ const OrderTab = ({ selected, handleSelect }) => {
     }
   }
 
+  const handleShippedOrderID = async (e) => {
+    e.preventDefault();
+    // const oid = orderId.slice(1);
+    let isHashed = 1;
+    let oid = orderId;
+    if (orderId[0] === '#') {
+      oid = orderId.slice(1);
+      isHashed = 0;
+    }
+    console.log(oid);
+    try {
+      const res = await axios.get(`http://localhost:8080/clients/orderid/single/${oid}`, {
+        params: { isHashed: isHashed },
+      });
+      console.log(res);
+      toast.success("Order Shipped", {
+        position: "top-center",
+        autoClose: 500,
+        transition: Bounce,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (error) {
+      console.log("OrderID Shipping Error->", error);
+      if (error.response?.status === 404) {
+        toast.error("OrderID not found", {
+          position: "top-center",
+          autoClose: 1000,
+          transition: Bounce,
+        })
+      }
+      else {
+        toast.error("Internal Server Error", {
+          position: "top-right",
+        });
+      }
+    }
+  }
+
   const headers = [
     { label: "UniqueID", key: "unique_id" },
     { label: "Date", key: "date" },
@@ -99,39 +139,6 @@ const OrderTab = ({ selected, handleSelect }) => {
     { label: "CHANNEL NAME", key: "channelname" },
     { label: "STATUS", key: "status" },
   ];
-
-  const handleShippedOrderID = async (e) => {
-    e.preventDefault();
-    const oid = orderId.slice(1);
-    try {
-      await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/orderid/single/${oid}`);
-      toast.success("Order Shipped", {
-        position: "top-center",
-        autoClose: 500,
-        transition: Bounce,
-      });
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
-    } catch (error) {
-      console.log("OrderID Shipping Error->", error);
-      if (error.response.status === 404) {
-        toast.error("OrderID not found", {
-          position: "top-center",
-          autoClose: 1000,
-          transition: Bounce,
-        })
-      }
-      else {
-        toast.error("Internal Server Error", {
-          position: "top-right",
-        });
-      }
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    }
-  }
 
   return (
     <>
