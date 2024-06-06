@@ -7,6 +7,7 @@ import { Bounce, toast } from 'react-toastify';
 import Uploadbutton from './uploadbutton';
 import { CSVLink } from 'react-csv';
 import { ArrowPathIcon, CloudArrowDownIcon } from '@heroicons/react/24/solid';
+import { axiosPublic } from '../utils/axiosInstance';
 
 const OrderTab = ({ selected, handleSelect }) => {
   const [Loading, setLoading] = useState(false);
@@ -40,7 +41,7 @@ const OrderTab = ({ selected, handleSelect }) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients');
+      const res = await axiosPublic.get('/clients');
       setAllData(res.data);
       setLoading(false);
     } catch (error) {
@@ -51,7 +52,7 @@ const OrderTab = ({ selected, handleSelect }) => {
   const handleShippedAwb = async (e) => {
     e.preventDefault();
     try {
-      await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/awb/single/${awb}`);
+      await axiosPublic.get(`/clients/awb/single/${awb}`);
       toast.success("Order Shipped", {
         position: "top-center",
         autoClose: 500,
@@ -91,7 +92,7 @@ const OrderTab = ({ selected, handleSelect }) => {
     }
     console.log(oid);
     try {
-      const res = await axios.get(`http://localhost:8080/clients/orderid/single/${oid}`, {
+      const res = await axiosPublic.get(`/clients/orderid/single/${oid}`, {
         params: { isHashed: isHashed },
       });
       console.log(res);

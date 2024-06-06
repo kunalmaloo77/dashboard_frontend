@@ -1,4 +1,5 @@
 import Pagination from '@/widgets/layout/pagination';
+import { axiosPublic } from '@/widgets/utils/axiosInstance';
 import { CloudArrowDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
 import { Button, CardBody, Spinner, Typography } from '@material-tailwind/react';
 import axios from 'axios';
@@ -21,7 +22,7 @@ const RtoDelivered = () => {
   const getRTODelivered = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtodelivered');
+      const res = await axiosPublic.get('/clients/rtodelivered');
       setRTODeliveredData(res.data.rtoDelivered);
       setTotalPages(res.data.totalPages);
       setLoading(false);
@@ -59,7 +60,7 @@ const RtoDelivered = () => {
   const downloadRtoDeliveredOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtodelivered', {
+      const res = await axiosPublic.get('/clients/rtodelivered', {
         params: {
           limit: totalPages * rtoDeliveredData.length,
         }

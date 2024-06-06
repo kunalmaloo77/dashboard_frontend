@@ -2,6 +2,7 @@ import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Pop
 import axios from 'axios';
 import React, { useState } from 'react'
 import { Flip, toast } from 'react-toastify';
+import { axiosPublic } from '../utils/axiosInstance';
 
 const Uploadbutton = () => {
   const [file, setFile] = useState(null);
@@ -24,7 +25,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const response = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload', formData, {
+      const response = await axiosPublic.post('/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -66,7 +67,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const res = await axios.patch('https://dashboard-backend-tw3m.onrender.com/upload/awb/bulkupload', formData, {
+      const res = await axiosPublic.patch('/upload/awb/bulkupload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -109,7 +110,7 @@ const Uploadbutton = () => {
     const formData = new FormData();
     formData.append('csv', file);
     try {
-      const res = await axios.patch('https://dashboard-backend-tw3m.onrender.com/upload/status', formData, {
+      const res = await axiosPublic.patch('/upload/status', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -150,7 +151,7 @@ const Uploadbutton = () => {
     formData.append('csv', file);
     try {
       setLoading(true);
-      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/shopify', formData, {
+      const res = await axiosPublic.post('/upload/shopify', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -194,7 +195,7 @@ const Uploadbutton = () => {
     formData.append('csv', file);
     try {
       setLoading(true);
-      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/delivery', formData, {
+      const res = await axiosPublic.post('/upload/delivery', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -237,7 +238,7 @@ const Uploadbutton = () => {
     formData.append('csv', file);
     try {
       setLoading(true);
-      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/pagazo', formData, {
+      const res = await axiosPublic.post('/upload/pagazo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -280,7 +281,7 @@ const Uploadbutton = () => {
     formData.append('csv', file);
     try {
       setLoading(true);
-      const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/upload/dealshunter', formData, {
+      const res = await axiosPublic.post('/upload/dealshunter', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }

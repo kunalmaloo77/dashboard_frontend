@@ -18,10 +18,10 @@ import {
   PlusIcon,
 } from "@heroicons/react/24/solid";
 import { Field, FieldArray, Form, Formik } from "formik";
-import axios from "axios";
 import { useState } from "react";
 import { Flip, toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { axiosPublic } from "@/widgets/utils/axiosInstance";
 
 export function Office() {
   const [loading, setLoading] = useState(false);
@@ -68,7 +68,7 @@ export function Office() {
     });
     try {
       for (let i = 0; i < flattenedData.length; i++) {
-        const res = await axios.post('https://dashboard-backend-tw3m.onrender.com/clients', flattenedData[i]);
+        const res = await axiosPublic.post('/clients', flattenedData[i]);
         console.log(res.data);
       }
       toast.success("Order Placed Successfully", {

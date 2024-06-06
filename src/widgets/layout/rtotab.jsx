@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import Uploadbutton from './uploadbutton';
 import axios from 'axios';
 import { Bounce, toast } from 'react-toastify';
+import { axiosPublic } from '../utils/axiosInstance';
 
 const RtoTab = ({ selected, handleSelect }) => {
   const nestedRoutes = routes[0].pages[4].nestedRoutes;
@@ -36,7 +37,7 @@ const RtoTab = ({ selected, handleSelect }) => {
   const handleRecievedAwb = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/awb/status/${awb}`);
+      const res = await axiosPublic.get(`/clients/awb/status/${awb}`);
       toast.success("Recieved", {
         position: "top-center",
         autoClose: 500,
@@ -75,7 +76,7 @@ const RtoTab = ({ selected, handleSelect }) => {
       oid = orderId.slice(1);
     }
     try {
-      const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/orderid/status/${oid}`, {
+      const res = await axiosPublic.get(`/clients/orderid/status/${oid}`, {
         params: { isHashed: isHashed },
       });
       toast.success("Recieved", {

@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import { Field, FieldArray, Form, Formik } from "formik";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { axiosPublic } from "@/widgets/utils/axiosInstance";
 
 export function Profile() {
   // const API_KEY = '65b3525fcfda1046190673akpe8307d'
@@ -100,14 +101,14 @@ export function Profile() {
     if (id.charAt(0) === '#') {
       oid = '%23' + id.slice(1);
     }
-    const res = await axios.patch(`https://dashboard-backend-tw3m.onrender.com/clients/${oid}`, product);
+    const res = await axiosPublic.patch(`/clients/${oid}`, product);
     console.log(res.data);
   }
   const getClient = async () => {
     if (id.charAt(0) === '#') {
       oid = '%23' + id.slice(1);
     }
-    const res = await axios.get(`https://dashboard-backend-tw3m.onrender.com/clients/${oid}`);
+    const res = await axiosPublic.get(`/clients/${oid}`);
     setName(res.data.name);
     setEmail(res.data.email);
   }

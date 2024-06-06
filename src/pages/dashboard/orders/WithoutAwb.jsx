@@ -1,11 +1,12 @@
 import Pagination from '@/widgets/layout/pagination';
+import { axiosPublic } from '@/widgets/utils/axiosInstance';
 import { ChevronUpDownIcon, CloudArrowDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
-import { Button, CardBody, Spinner, Typography } from '@material-tailwind/react';
+import { Button, CardBody, Dialog, DialogBody, DialogFooter, DialogHeader, Input, Spinner, Typography } from '@material-tailwind/react';
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { CSVLink } from 'react-csv';
-import { Bounce, toast } from 'react-toastify';
+import { Bounce, Flip, toast } from 'react-toastify';
 
 
 const WithoutAwb = () => {
@@ -14,8 +15,11 @@ const WithoutAwb = () => {
   const [loading1, setLoading1] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
+  const [open, setOpen] = useState(false);
   const [allData, setAllData] = useState([]);
+  const [file, setFile] = useState(null);
   const currentItems = withoutAwbData;
+  const fileInputRef = useRef(null);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -28,7 +32,7 @@ const WithoutAwb = () => {
     }
     try {
       const trunacatedoid = orderid.slice(1);
-      const res = await axios.patch(`https://dashboard-backend-tw3m.onrender.com/clients/awb/${oid}`, product);
+      const res = await axiosPublic.patch(`/clients/awb/${oid}`, product);
       toast.success("Order Confirmed", {
         position: "top-center",
         autoClose: 1000,
@@ -47,7 +51,7 @@ const WithoutAwb = () => {
   const getWithoutAwb = async () => {
     try {
       setLoading(true)
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/withoutawb', {
+      const res = await axiosPublic.get('/clients/withoutawb', {
         params: {
           page: currentPage,
         }
@@ -88,7 +92,7 @@ const WithoutAwb = () => {
   const downloadWithoutAwbOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/withoutawb', {
+      const res = await axiosPublic.get('/clients/withoutawb', {
         params: {
           limit: totalPages * withoutAwbData.length,
         }
@@ -102,20 +106,97 @@ const WithoutAwb = () => {
     }
   }
 
+  const handleSkuUpload = async () => {
+    setOpen(!open)
+    if (!file) {
+      toast.error("Please select a file to upload", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      });
+      return;
+    }
+    const formData = new FormData();
+    formData.append('csv', file);
+    console.log(file);
+    try {
+      console.log(import.meta.env.MODE);
+      setLoading(true);
+      await axiosPublic.post('/upload/skuUpload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      setLoading(false);
+      toast.success("File Uploaded Successfully", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Flip
+      })
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      if (error.response.status === 400) {
+        toast.error(error.response.data.error, {
+          position: "top-center",
+          autoClose: 1000,
+          transition: Flip
+        })
+      } else {
+        toast.error("An error occurred while uploading the file", {
+          position: "top-center",
+          autoClose: 1000,
+          transition: Flip
+        });
+      }
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000);
+    }
+  }
+
   const TABLE_HEAD = ["order id", "date", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
+
+  const handleFileChange = async (e) => {
+    setFile(e.target.files[0]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    handleOpen();
+  };
+  const handleOpen = () => {
+    setOpen(!open);
+  }
 
   return (
     <div>
-      <div className='inline-block'>
+      <div className='flex mt-2 ml-4 items-center'>
+        <form onSubmit={handleSkuUpload} encType="multipart/form-data" id='form'>
+          <div className='flex'>
+            <label htmlFor='file-upload' className='cursor-pointer px-3 py-2 border-2 rounded-md'>
+              Upload CSV
+            </label>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileChange} className='hidden'
+              id='file-upload'
+              ref={fileInputRef}
+            />
+          </div>
+        </form>
         {allData.length > 0 ? (
           <CSVLink data={allData} headers={headers} filename={"confirmed_orders.csv"}>
-            <Button className="flex items-center justify-center gap-2 ml-4 mt-2" color='green'>
+            <Button className="flex items-center justify-center gap-2 ml-4" color='green'>
               <CloudArrowDownIcon className='h-[1.1rem]' />
               <p>CSV generated</p>
             </Button>
           </CSVLink>
         ) : (
-          <Button onClick={downloadWithoutAwbOrders} className="mt-2 flex items-center justify-center gap-2 ml-4" color='green' disabled={loading1 ? true : false}>
+          <Button onClick={downloadWithoutAwbOrders} className=" flex items-center justify-center gap-2 ml-4" color='green' disabled={loading1 ? true : false}>
             {loading1 ?
               <div role="status">
                 <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -325,7 +406,27 @@ const WithoutAwb = () => {
               currentPage={currentPage}
               onPageChange={handlePageChange}
             />
-          </div>)
+            <Dialog open={open} handler={handleOpen}>
+              <DialogHeader>Upload SKU's</DialogHeader>
+              <DialogBody>
+                Are you sure you want to upload {file?.name}
+              </DialogBody>
+              <DialogFooter>
+                <Button
+                  variant="text"
+                  color="red"
+                  onClick={handleOpen}
+                  className="mr-1"
+                >
+                  <span>Cancel</span>
+                </Button>
+                <Button variant="gradient" color="green" onClick={handleSkuUpload}>
+                  <span>Confirm</span>
+                </Button>
+              </DialogFooter>
+            </Dialog>
+          </div>
+        )
       }
     </div>
   )

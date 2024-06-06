@@ -1,8 +1,8 @@
 import OrderTab from '@/widgets/layout/ordertab';
 import Pagination from '@/widgets/layout/pagination';
-import { ChevronUpDownIcon, CloudArrowDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
-import { Button, CardBody, CardFooter, Spinner, Typography } from '@material-tailwind/react';
-import axios from 'axios';
+import { axiosPublic } from '@/widgets/utils/axiosInstance';
+import { CloudArrowDownIcon } from '@heroicons/react/24/solid';
+import { Button, CardBody, Typography } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react'
 import { CSVLink } from 'react-csv';
 
@@ -22,7 +22,7 @@ const RtoIntransit = () => {
   const getRTO = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtointransit');
+      const res = await axiosPublic.get('/clients/rtointransit');
       setRTOData(res.data.rtointransit);
       setTotalPages(res.data.totalPages);
       setLoading(false);
@@ -60,7 +60,7 @@ const RtoIntransit = () => {
   const downloadRtoIntransitOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/rtointransit', {
+      const res = await axiosPublic.get('/clients/rtointransit', {
         params: {
           limit: totalPages * rtoData.length,
         }

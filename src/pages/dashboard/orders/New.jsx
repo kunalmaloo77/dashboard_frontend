@@ -1,4 +1,5 @@
 import Pagination from '@/widgets/layout/pagination';
+import { axiosPublic } from '@/widgets/utils/axiosInstance';
 import DateRange from '@/widgets/utils/date-range';
 import { ChevronUpDownIcon, CloudArrowDownIcon } from '@heroicons/react/20/solid';
 import { Button, CardBody, Dialog, DialogBody, DialogFooter, DialogHeader, Typography } from '@material-tailwind/react';
@@ -24,7 +25,7 @@ const New = () => {
   const getOrders = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/orders', {
+      const res = await axiosPublic.get('/clients/orders', {
         params: {
           page: currentPage,
         }
@@ -62,7 +63,7 @@ const New = () => {
   const downloadCustomOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/orders', {
+      const res = await axiosPublic.get('/clients/orders', {
         params: {
           limit: totalPages * ordersData.length,
         }

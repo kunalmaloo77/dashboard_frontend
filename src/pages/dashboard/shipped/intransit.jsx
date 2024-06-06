@@ -1,5 +1,6 @@
 import OrderTab from '@/widgets/layout/ordertab';
 import Pagination from '@/widgets/layout/pagination';
+import { axiosPublic } from '@/widgets/utils/axiosInstance';
 import { CloudArrowDownIcon, FolderArrowDownIcon } from '@heroicons/react/24/solid';
 import { Button, CardBody, Typography } from '@material-tailwind/react';
 import axios from 'axios';
@@ -21,7 +22,7 @@ const Intransit = () => {
   const getShipped = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/shipped', {
+      const res = await axiosPublic.get('/clients/shipped', {
         params: {
           page: currentPage,
         }
@@ -64,7 +65,7 @@ const Intransit = () => {
   const downloadIntransitOrders = async () => {
     try {
       setLoading1(true);
-      const res = await axios.get('https://dashboard-backend-tw3m.onrender.com/clients/shipped', {
+      const res = await axiosPublic.get('/clients/shipped', {
         params: {
           limit: totalPages * shippedData.length,
         }
