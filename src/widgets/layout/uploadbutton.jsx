@@ -1,5 +1,4 @@
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Popover, PopoverContent, PopoverHandler } from '@material-tailwind/react'
-import axios from 'axios';
 import React, { useState } from 'react'
 import { Flip, toast } from 'react-toastify';
 import { axiosPublic } from '../utils/axiosInstance';
