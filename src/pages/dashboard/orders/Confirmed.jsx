@@ -13,6 +13,7 @@ const Confirmed = () => {
   const [loading1, setLoading1] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
+  const [sku, setSku] = useState(null);
   const currentItems = confirmedData;
   const [allData, setAllData] = useState([]);
 
@@ -31,6 +32,7 @@ const Confirmed = () => {
       });
       setConfirmedData(res.data.confirmed);
       setTotalPages(res.data.totalPages);
+      setSku(res.data.Sku);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -46,7 +48,12 @@ const Confirmed = () => {
           limit: totalPages * confirmedData.length,
         }
       });
-      setAllData(res.data.confirmed);
+      const combinedData = res.data.confirmed.map((order, index) => ({
+        ...order,
+        sku: res.data.Sku[index][0].mainSKU,
+        size: res.data.Sku[index][0].size,
+      }));
+      setAllData(combinedData);
       setTotalPages(res.data.totalPages);
       setLoading1(false);
     } catch (error) {
@@ -55,7 +62,7 @@ const Confirmed = () => {
     }
   }
 
-  const TABLE_HEAD = ["date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
+  const TABLE_HEAD = ["date", "order id", "name", "sku", "size", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   useEffect(() => {
     getConfirmed();
@@ -65,7 +72,8 @@ const Confirmed = () => {
     { label: "Date", key: "date" },
     { label: "ORDER ID", key: "orderid" },
     { label: "NAME", key: "name" },
-    { label: "SKUS", key: "sku" },
+    { label: "SKU", key: "sku" },
+    { label: "SIZE", key: "size" },
     { label: "AMOUNT", key: "amount" },
     { label: "QUANTITY", key: "quantity" },
     { label: "TOTAL AMOUNT", key: "totalamount" },
@@ -143,7 +151,7 @@ const Confirmed = () => {
                 </thead>
                 <tbody>
                   {currentItems.map(
-                    ({ orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
+                    ({ orderid, name, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
                       const className = `py-3 px-5 ${key === currentItems.length - 1
                         ? ""
                         : "border-b border-blue-gray-50"
@@ -167,7 +175,12 @@ const Confirmed = () => {
                           </td>
                           <td className={className}>
                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                              {sku}
+                              {sku[key][0].mainSKU}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography className="text-xs font-semibold text-blue-gray-600">
+                              {sku[key][0].size}
                             </Typography>
                           </td>
                           <td className={className}>

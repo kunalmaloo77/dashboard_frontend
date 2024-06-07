@@ -17,6 +17,7 @@ const WithoutAwb = () => {
   const [totalPages, setTotalPages] = useState(null);
   const [open, setOpen] = useState(false);
   const [allData, setAllData] = useState([]);
+  const [sku, setSku] = useState(null);
   const [file, setFile] = useState(null);
   const currentItems = withoutAwbData;
   const fileInputRef = useRef(null);
@@ -58,6 +59,7 @@ const WithoutAwb = () => {
       });
       setWithoutAwbData(res.data.items);
       setTotalPages(res.data.totalPages);
+      setSku(res.data.Sku);
       setLoading(false);
     } catch (error) {
       console.log("without awb error->", error);
@@ -76,7 +78,8 @@ const WithoutAwb = () => {
     { label: "Date", key: "date" },
     { label: "ORDER ID", key: "orderid" },
     { label: "NAME", key: "name" },
-    { label: "SKUS", key: "sku" },
+    { label: "SKU", key: "sku" },
+    { label: "SIZE", key: "size" },
     { label: "AMOUNT", key: "amount" },
     { label: "QUANTITY", key: "quantity" },
     { label: "TOTAL AMOUNT", key: "totalamount" },
@@ -97,7 +100,12 @@ const WithoutAwb = () => {
           limit: totalPages * withoutAwbData.length,
         }
       });
-      setAllData(res.data.items);
+      const combinedData = res.data.items.map((order, index) => ({
+        ...order,
+        sku: res.data.Sku[index][0]?.mainSKU,
+        size: res.data.Sku[index][0]?.size,
+      }));
+      setAllData(combinedData);
       setTotalPages(res.data.totalPages);
       setLoading1(false);
     } catch (error) {
@@ -158,7 +166,7 @@ const WithoutAwb = () => {
     }
   }
 
-  const TABLE_HEAD = ["order id", "date", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
+  const TABLE_HEAD = ["order id", "date", "name", "sku", "size", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   const handleFileChange = async (e) => {
     setFile(e.target.files[0]);
@@ -249,7 +257,7 @@ const WithoutAwb = () => {
                 </thead>
                 <tbody>
                   {currentItems?.map(
-                    ({ orderid, name, sku, amount, quantity, mobilenumber, totalamount, _id, email, date, address, city, state, postalcode, channelname }, key) => {
+                    ({ orderid, name, amount, quantity, mobilenumber, totalamount, _id, email, date, address, city, state, postalcode, channelname }, key) => {
                       const className = `py-3 px-5 ${key === currentItems.length - 1
                         ? ""
                         : "border-b border-blue-gray-50"
@@ -277,7 +285,13 @@ const WithoutAwb = () => {
                           <td className={className}>
                             <Typography
                               className="text-xs font-semibold text-blue-gray-600">
-                              {sku}
+                              {sku[key][0].mainSKU}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography
+                              className="text-xs font-semibold text-blue-gray-600">
+                              {sku[key][0].size}
                             </Typography>
                           </td>
                           <td className={className}>

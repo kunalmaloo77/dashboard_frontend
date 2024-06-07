@@ -42,9 +42,15 @@ const OrderTab = ({ selected, handleSelect }) => {
     try {
       setLoading(true);
       const res = await axiosPublic.get('/clients');
-      setAllData(res.data);
+      const combinedData = res.data.orders.map((order, index) => ({
+        ...order,
+        sku: res.data.Sku[index][0]?.mainSKU,
+        size: res.data.Sku[index][0]?.size,
+      }));
+      setAllData(combinedData);
       setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log("error fethching data ->", error);
     }
   }
@@ -126,7 +132,8 @@ const OrderTab = ({ selected, handleSelect }) => {
     { label: "Date", key: "date" },
     { label: "ORDER ID", key: "orderid" },
     { label: "NAME", key: "name" },
-    { label: "SKUS", key: "sku" },
+    { label: "SKU", key: "sku" },
+    { label: "SIZE", key: "size" },
     { label: "AMOUNT", key: "amount" },
     { label: "QUANTITY", key: "quantity" },
     { label: "TOTAL AMOUNT", key: "totalamount" },

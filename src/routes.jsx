@@ -6,6 +6,7 @@ import {
   CheckIcon,
   ShoppingBagIcon,
   PlusIcon,
+  KeyIcon,
 } from "@heroicons/react/24/solid";
 import { Home, Orders, Shipped, Rto, Office } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
@@ -18,6 +19,7 @@ import Delivered from "./pages/dashboard/shipped/delivered";
 import RtoIntransit from "./pages/dashboard/rto/RtoIntransit";
 import RtoDelivered from "./pages/dashboard/rto/RtoDelivered";
 import RtoRecieved from "./pages/dashboard/rto/RtoRecieved";
+import Sku from "./pages/dashboard/sku";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -109,6 +111,12 @@ export const routes = [
             element: <RtoRecieved />,
           }
         ]
+      },
+      {
+        icon: <KeyIcon {...icon} />,
+        name: "SKU",
+        path: "/skumapping",
+        element: <Sku />,
       },
 
     ],
