@@ -44,8 +44,8 @@ const OrderTab = ({ selected, handleSelect }) => {
       const res = await axiosPublic.get('/clients');
       const combinedData = res.data.orders.map((order, index) => ({
         ...order,
-        sku: res.data.Sku[index][0]?.mainSKU,
-        size: res.data.Sku[index][0]?.size,
+        sku: res.data.Sku?.[index]?.mainSKU ? res.data.Sku[index].mainSKU : "NA",
+        size: res.data.Sku?.[index]?.size ? res.data.Sku[index].size : "NA",
       }));
       setAllData(combinedData);
       setLoading(false);
