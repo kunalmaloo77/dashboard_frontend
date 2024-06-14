@@ -22,6 +22,14 @@ export function Sidenav({ brandImg, brandName, routes }) {
     const normalizedRoutePath = routePath.replace(/\*$/, "");
     return location.pathname.startsWith(normalizedRoutePath);
   };
+  const getFirstNestedRoute = (pages) => {
+    for (const page of pages) {
+      if (page.nestedRoutes && page.nestedRoutes.length > 0) {
+        return `/${page.layout}${page.path}/${page.nestedRoutes[0].path}`;
+      }
+    }
+    return null;
+  };
 
   return (
     <aside
@@ -64,11 +72,13 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 </Typography>
               </li>
             )}
-            {pages.map(({ icon, name, path }) => {
+            {pages.map(({ icon, name, path, nestedRoutes }) => {
               const fullPath = `/${layout}${path}`;
+              const firstNestedRoute = nestedRoutes ? getFirstNestedRoute([{ layout, path, nestedRoutes }]) : null;
+              const navPath = firstNestedRoute || fullPath;
               return (
                 <li key={name}>
-                  <NavLink to={fullPath}>
+                  <NavLink to={navPath}>
                     {() => (
                       <Button
                         variant={isRouteActive(fullPath) ? "gradient" : "text"}

@@ -2,14 +2,18 @@ import routes from '@/routes';
 import { Button, Input, Tab, Tabs, TabsHeader } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Bounce, toast } from 'react-toastify';
 import Uploadbutton from './uploadbutton';
 import { CSVLink } from 'react-csv';
 import { ArrowPathIcon, CloudArrowDownIcon } from '@heroicons/react/24/solid';
 import { axiosPublic } from '../utils/axiosInstance';
 
-const OrderTab = ({ selected, handleSelect }) => {
+const OrderTab = () => {
+  const location = useLocation();
+  const parts = location.pathname.split('/');
+  const tab = parts[parts.length - 1];
+  const [selected, setSelected] = useState(tab);
   const [Loading, setLoading] = useState(false);
   const nestedRoutes = routes[0].pages[2].nestedRoutes;
   const [orderId, setOrderId] = useState('');
@@ -18,7 +22,9 @@ const OrderTab = ({ selected, handleSelect }) => {
   const [selectedOption, setSelectedOption] = useState(() => {
     return localStorage.getItem('selectedOption') || null;
   });
-
+  const handleSelect = (value) => {
+    setSelected(value);
+  }
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   }

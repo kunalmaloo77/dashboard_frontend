@@ -185,7 +185,7 @@ const WithoutAwb = () => {
         <form onSubmit={handleSkuUpload} encType="multipart/form-data" id='form'>
           <div className='flex'>
             <label htmlFor='file-upload' className='cursor-pointer px-3 py-2 border-2 rounded-md'>
-              Upload CSV
+              Upload SKU
             </label>
             <input
               type="file"
