@@ -114,11 +114,12 @@ const RtoTab = ({ selected, handleSelect }) => {
           <Tabs value={selected} className="w-full">
             <TabsHeader>
               {nestedRoutes.map(({ name, value, path }) => (
-                <NavLink to={`/dashboard/rto${path}`}>
+                name && (<NavLink to={path}>
                   <Tab key={value} value={value} onClick={() => handleSelect(value)}>
                     &nbsp;&nbsp;{name}&nbsp;&nbsp;
                   </Tab>
                 </NavLink>
+                )
               ))}
             </TabsHeader>
           </Tabs>

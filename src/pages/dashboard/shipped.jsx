@@ -5,26 +5,20 @@ import {
   Button,
   CardFooter,
 } from "@material-tailwind/react";
-import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
-import routes from "@/routes";
-import OrderTab from "@/widgets/layout/ordertab";
+import { useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import ShippedTab from "@/widgets/layout/shippedtab";
 
 export function Shipped() {
 
-  const nestedRoutes = routes[0].pages[3].nestedRoutes;
+  const location = useLocation();
+  const parts = location.pathname.split('/');
+  const tab = parts[parts.length - 1];
+  const [selected, setSelected] = useState(tab);
 
-  const [selected, setSelected] = useState(() => {
-    return localStorage.getItem('selectedShippedTab') || null;
-  });
   const handleSelect = (value) => {
     setSelected(value);
   }
-
-  useEffect(() => {
-    localStorage.setItem('selectedShippedTab', selected);
-  }, [selected]);
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
@@ -42,11 +36,7 @@ export function Shipped() {
           </div>
           <ShippedTab selected={selected} handleSelect={handleSelect} />
         </CardHeader>
-        <Routes>
-          {nestedRoutes.map(({ path, element }) => (
-            <Route key={path} exact path={path} element={element} />
-          ))}
-        </Routes>
+        <Outlet />
       </Card>
     </div>
   );

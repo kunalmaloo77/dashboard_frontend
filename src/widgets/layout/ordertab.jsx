@@ -155,11 +155,13 @@ const OrderTab = ({ selected, handleSelect }) => {
           <Tabs value={selected} className="w-max">
             <TabsHeader>
               {nestedRoutes.map(({ name, value, path }) => (
-                <Tab key={value} value={value} className='w-max' onClick={() => handleSelect(value)}>
-                  <NavLink to={`/dashboard/orders${path}`}>
-                    &nbsp;&nbsp;{name}&nbsp;&nbsp;
+                name && (
+                  <NavLink to={path}>
+                    <Tab key={value} value={value} className='w-max' onClick={() => handleSelect(value)}>
+                      &nbsp;&nbsp;{name}&nbsp;&nbsp;
+                    </Tab>
                   </NavLink>
-                </Tab>
+                )
               ))}
             </TabsHeader>
           </Tabs>

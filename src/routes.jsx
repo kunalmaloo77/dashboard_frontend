@@ -20,6 +20,7 @@ import RtoIntransit from "./pages/dashboard/rto/RtoIntransit";
 import RtoDelivered from "./pages/dashboard/rto/RtoDelivered";
 import RtoRecieved from "./pages/dashboard/rto/RtoRecieved";
 import Sku from "./pages/dashboard/sku";
+import { Navigate } from "react-router-dom";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -44,72 +45,85 @@ export const routes = [
       {
         icon: <ShoppingBagIcon {...icon} />,
         name: "Orders",
-        path: "/orders",
+        path: "/orders/*",
         element: <Orders />,
         nestedRoutes: [
           {
             name: "New",
             value: "new",
-            path: "/new",
+            path: "new",
             element: <New />,
           },
           {
             name: "Confirmed",
             value: "withoutawb",
-            path: "/withoutawb",
+            path: "withoutawb",
             element: <WithoutAwb />,
           },
           {
             name: "Ready to Ship",
             value: "ready-to-ship",
-            path: "/confirmed",
+            path: "confirmed",
             element: <Confirmed />,
+          },
+          {
+            path: "*",
+            element: <Navigate to="new" replace />,
           },
         ],
       },
       {
         icon: <TruckIcon {...icon} />,
         name: "Shipped",
-        path: "/shipped",
+        path: "/shipped/*",
         element: <Shipped />,
         nestedRoutes: [
           {
             name: "Intransit",
             value: "intransit",
-            path: "/intransit",
+            path: "intransit",
             element: <Intransit />,
           },
           {
             name: "Delivered",
             value: "delivered",
-            path: "/delivered",
+            path: "delivered",
             element: <Delivered />,
-          }]
+          },
+          {
+            path: "*",
+            element: <Navigate to="intransit" replace />,
+          },
+        ]
       },
       {
         icon: <ArrowUturnLeftIcon {...icon} />,
         name: "RTO",
-        path: "/rto",
+        path: "/rto/*",
         element: <Rto />,
         nestedRoutes: [
           {
             name: "Return Intransit",
             value: "rtointransit",
-            path: "/rtointransit",
+            path: "rtointransit",
             element: <RtoIntransit />,
           },
           {
             name: "Return Delivered",
             value: "rtodelivered",
-            path: "/rtodelivered",
+            path: "rtodelivered",
             element: <RtoDelivered />,
           },
           {
             name: "Return Recieved",
             value: "rtorecieved",
-            path: "/rtorecieved",
+            path: "rtorecieved",
             element: <RtoRecieved />,
-          }
+          },
+          {
+            path: "*",
+            element: <Navigate to="rtointransit" replace />,
+          },
         ]
       },
       {

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { IconButton } from "@material-tailwind/react";
 import {
@@ -43,7 +43,7 @@ export function Dashboard({ showToast }) {
                   {
                     nestedRoutes && nestedRoutes.map(({ path: nestedPath, element: nestedElement }) => {
                       return (
-                        <Route key={`${path}${nestedPath}`} path={`${path}${nestedPath}`} element={nestedElement} />
+                        <Route key={`${nestedPath}`} path={nestedPath} element={nestedElement} />
                       )
                     })
                   }

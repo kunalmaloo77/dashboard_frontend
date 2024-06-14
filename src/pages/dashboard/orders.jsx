@@ -6,24 +6,18 @@ import {
   CardFooter,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import routes from "@/routes";
 import OrderTab from "@/widgets/layout/ordertab";
 
 export function Orders() {
-
-  const nestedRoutes = routes[0].pages[2].nestedRoutes;
-
-  const [selected, setSelected] = useState(() => {
-    return localStorage.getItem('selectedTab') || null;
-  });
+  const location = useLocation();
+  const parts = location.pathname.split('/');
+  const tab = parts[parts.length - 1];
+  const [selected, setSelected] = useState(tab);
   const handleSelect = (value) => {
     setSelected(value);
   }
-
-  useEffect(() => {
-    localStorage.setItem('selectedTab', selected);
-  }, [selected]);
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
@@ -41,11 +35,7 @@ export function Orders() {
           </div>
           <OrderTab selected={selected} handleSelect={handleSelect} />
         </CardHeader>
-        <Routes>
-          {nestedRoutes.map(({ path, element }) => (
-            <Route key={path} exact path={path} element={element} />
-          ))}
-        </Routes>
+        <Outlet />
       </Card>
     </div>
   );

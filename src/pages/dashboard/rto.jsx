@@ -1,20 +1,17 @@
 import { Card, CardHeader, Typography } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes, useLocation } from "react-router-dom";
 import routes from "@/routes";
 import RtoTab from "@/widgets/layout/rtotab";
 
 export function Rto() {
-  const nestedRoutes = routes[0].pages[4].nestedRoutes;
-  const [selected, setSelected] = useState(() => {
-    return localStorage.getItem('selectedRTOTab') || null;
-  });
+  const location = useLocation();
+  const parts = location.pathname.split('/');
+  const tab = parts[parts.length - 1];
+  const [selected, setSelected] = useState(tab);
   const handleSelect = (value) => {
     setSelected(value);
   }
-  useEffect(() => {
-    localStorage.setItem('selectedRTOTab', selected);
-  }, [selected]);
 
   return (
     <Card className="h-full w-full">
@@ -31,11 +28,7 @@ export function Rto() {
         </div>
         <RtoTab selected={selected} handleSelect={handleSelect} />
       </CardHeader>
-      <Routes>
-        {nestedRoutes.map(({ path, element }) => (
-          <Route key={path} exact path={path} element={element} />
-        ))}
-      </Routes>
+      <Outlet />
     </Card>
   );
 }
