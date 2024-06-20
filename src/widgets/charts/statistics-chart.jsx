@@ -6,13 +6,76 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 
-export function StatisticsChart({ color, chart, title, description, footer }) {
+export function StatisticsChart({ color, chart, title, description, footer, data, startDate, endDate }) {
+  const [chartData, setChartData] = useState({ ...chart });
+  const includedStatuses = ['in-transit', 'delivered', 'cancelled initiated'];
+
+  useEffect(() => {
+    const updateChart = () => {
+      const generateWeeklyOrderArray = (filteredData, startDate, endDate) => {
+        const orderMap = {};
+        filteredData.forEach(item => {
+          item.forEach((ele) => {
+            const { date, status } = ele._id;
+            if (!status.startsWith('return') && !status.startsWith('cancel')) {
+              orderMap[date] = ele.totalOrder;
+            } else if (status.startsWith('return') || status.startsWith('cancel')) {
+              if (!orderMap[date]) {
+                orderMap[date] = 0;
+              }
+              orderMap[date] += ele.totalOrder;
+            }
+          });
+        });
+
+        const result = [];
+        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+          const dateString = date.toISOString().split('T')[0];
+          result.push(orderMap[dateString] || 0);
+        }
+        return result;
+      };
+
+      const newSeries = includedStatuses.map(status => {
+        if (!status.startsWith('return') && !status.startsWith('cancel')) {
+          const filteredData = data.filter(item => item[0]._id.status === status);
+          return {
+            name: status,
+            data: generateWeeklyOrderArray(filteredData, startDate, endDate)
+          };
+        }
+        return null;
+      }).filter(series => series !== null);
+
+      ['return', 'cancel'].forEach(status => {
+        const filteredData = data.filter(item => item[0]._id.status.startsWith(status));
+        newSeries.push({
+          name: status === 'return' ? 'RTO' : 'Cancel',
+          data: generateWeeklyOrderArray(filteredData, startDate, endDate)
+        });
+      });
+
+      setChartData(prevChartData => ({
+        ...prevChartData,
+        series: newSeries,
+      }));
+    };
+
+    if (data.length > 0) {
+      updateChart();
+    }
+  }, [data]);
+
+
+
   return (
     <Card className="border border-blue-gray-100 shadow-sm">
       <CardHeader variant="gradient" color={color} floated={false} shadow={false}>
-        <Chart {...chart} />
+        {/* {console.log("chart->", chart)} */}
+        <Chart {...chartData} />
       </CardHeader>
       <CardBody className="px-6 pt-0">
         <Typography variant="h6" color="blue-gray">
