@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 
 const New = () => {
   // const [ordersData, setOrdersData] = useState([]);
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,9 +57,6 @@ const New = () => {
     { label: "MOBILE NUMBER", key: "mobilenumber" },
     { label: "EMAIL", key: "email" },
   ];
-  const handleOpen = () => {
-    setOpen(!open);
-  }
 
   const downloadCustomOrders = async () => {
     try {
@@ -87,9 +83,6 @@ const New = () => {
   return (
     <div>
       <div className='flex gap-2 mt-2'>
-        <div>
-          <Button onClick={handleOpen} className='ml-4'>Date</Button>
-        </div>
         <div>
           {allData.length > 0 ? (
             <div>
@@ -255,30 +248,6 @@ const New = () => {
               currentPage={currentPage}
               onPageChange={handlePageChange}
             />
-            <Dialog open={open} handler={handleOpen}>
-              <DialogHeader>Pick Up Date Range</DialogHeader>
-              <DialogBody>
-                <DateRange />
-              </DialogBody>
-              <DialogFooter>
-                <Button
-                  variant="text"
-                  color="red"
-                  onClick={handleOpen}
-                  className="mr-1"
-                >
-                  <span>Cancel</span>
-                </Button>
-                <Button
-                  variant='gradient'
-                  color="green"
-                  onClick={handleOpen}
-                  className="mr-1"
-                >
-                  <span>Submit</span>
-                </Button>
-              </DialogFooter>
-            </Dialog>
           </div>
       }
     </div>

@@ -1,5 +1,5 @@
 import routes from '@/routes';
-import { Button, Input, Tab, Tabs, TabsHeader } from '@material-tailwind/react';
+import { Button, Dialog, DialogBody, DialogHeader, Input, Tab, Tabs, TabsHeader } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom';
@@ -8,8 +8,12 @@ import Uploadbutton from './uploadbutton';
 import { CSVLink } from 'react-csv';
 import { ArrowPathIcon, CloudArrowDownIcon } from '@heroicons/react/24/solid';
 import { axiosPublic } from '../utils/axiosInstance';
+import DateRange from '../utils/date-range';
 
 const OrderTab = () => {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
   const location = useLocation();
   const parts = location.pathname.split('/');
   const tab = parts[parts.length - 1];
@@ -19,11 +23,19 @@ const OrderTab = () => {
   const [orderId, setOrderId] = useState('');
   const [allData, setAllData] = useState([])
   const [awb, setAwb] = useState('');
+  const [startDate, setStartDate] = useState(oneMonthAgo);
+  const [endDate, setEndDate] = useState(new Date());
   const [selectedOption, setSelectedOption] = useState(() => {
     return localStorage.getItem('selectedOption') || null;
   });
+  const [open, setOpen] = useState(false);
+
   const handleSelect = (value) => {
     setSelected(value);
+  }
+  const handleDateChange = (dateRange) => {
+    setStartDate(dateRange[0].startDate);
+    setEndDate(dateRange[0].endDate);
   }
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
@@ -47,7 +59,9 @@ const OrderTab = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axiosPublic.get('/clients');
+      const res = await axiosPublic.get('/clients', {
+        params: { startDate: startDate, endDate: endDate }
+      });
       const combinedData = res.data.orders.map((order, index) => ({
         ...order,
         sku: res.data.Sku?.[index]?.mainSKU ? res.data.Sku[index].mainSKU : "NA",
@@ -153,7 +167,9 @@ const OrderTab = () => {
     { label: "CHANNEL NAME", key: "channelname" },
     { label: "STATUS", key: "status" },
   ];
-
+  const handleOpen = () => {
+    setOpen(!open);
+  }
   return (
     <>
       <div className='flex justify-between'>
@@ -255,6 +271,15 @@ const OrderTab = () => {
           }
         </div>
         <div>
+          <Button onClick={handleOpen} className='ml-4'>
+            {startDate && endDate && (
+              <>
+                {startDate.toLocaleDateString('en-GB')} - {endDate.toLocaleDateString('en-GB')}
+              </>
+            )}
+          </Button>
+        </div>
+        <div>
           {allData.length > 0 ? (
             <CSVLink data={allData} headers={headers} filename={"allorders.csv"}>
               <Button className="flex items-center justify-center gap-2 ml-4" variant='outlined'>
@@ -280,6 +305,12 @@ const OrderTab = () => {
         <div className='mr-2'>
           <Uploadbutton />
         </div>
+        <Dialog open={open} handler={handleOpen}>
+          <DialogHeader>Pick Up Date Range</DialogHeader>
+          <DialogBody>
+            <DateRange onDateRangeSubmit={handleDateChange} handleOpen={handleOpen} />
+          </DialogBody>
+        </Dialog>
       </div>
     </>
   )
