@@ -47,13 +47,16 @@ export function Home() {
 
   useEffect(() => {
     const today = new Date();
-    const currentDayOfWeek = today.getDay();
-    const daysSinceLastMonday = (currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1) + 7;
-    const lastMonday = new Date(today);
-    const lastSunday = new Date(today);
-    lastMonday.setDate(today.getDate() - daysSinceLastMonday);
-    lastSunday.setDate(today.getDate() - currentDayOfWeek);
-    setDates([lastMonday, lastSunday]);
+    const lastFifteenDays = new Date(today);
+    lastFifteenDays.setDate(today.getDate() - 15);
+    // const currentDayOfWeek = today.getDay();
+    // const daysSinceLastMonday = (currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1) + 7;
+    // const lastMonday = new Date(today);  
+    // const lastSunday = new Date(today);
+    // lastMonday.setDate(today.getDate() - daysSinceLastMonday);
+    // lastSunday.setDate(today.getDate() - currentDayOfWeek);
+    // setDates([lastMonday, lastSunday]);
+    setDates([lastFifteenDays, today]);
   }, []);
 
   useEffect(() => {

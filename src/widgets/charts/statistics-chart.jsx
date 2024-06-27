@@ -11,7 +11,7 @@ import Chart from "react-apexcharts";
 
 export function StatisticsChart({ color, chart, title, description, footer, data, startDate, endDate }) {
   const [chartData, setChartData] = useState({ ...chart });
-  const includedStatuses = ['in-transit', 'delivered', 'cancelled initiated'];
+  const includedStatuses = ['in-transit', 'delivered'];
 
   useEffect(() => {
     const updateChart = () => {
@@ -34,7 +34,7 @@ export function StatisticsChart({ color, chart, title, description, footer, data
         const result = [];
         for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
           const dateString = date.toISOString().split('T')[0];
-          result.push(orderMap[dateString] || 0);
+          result.push([dateString, orderMap[dateString] || 0]);
         }
         return result;
       };
@@ -74,7 +74,6 @@ export function StatisticsChart({ color, chart, title, description, footer, data
   return (
     <Card className="border border-blue-gray-100 shadow-sm">
       <CardHeader variant="gradient" color={color} floated={false} shadow={false}>
-        {/* {console.log("chart->", chart)} */}
         <Chart {...chartData} />
       </CardHeader>
       <CardBody className="px-6 pt-0">
