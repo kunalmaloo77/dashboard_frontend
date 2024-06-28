@@ -21,9 +21,11 @@ import { axiosPublic } from "@/widgets/utils/axiosInstance";
 export function Home() {
   const [data, setData] = useState([]);
   const [dates, setDates] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getData = async (startDate, endDate) => {
     try {
+      setLoading(true);
       const res = await axiosPublic.get('/clients/api/date', {
         params: { startDate: startDate, endDate: endDate }
       });
@@ -40,6 +42,7 @@ export function Home() {
       }, {}));
       setData(temp);
       console.log("temp->", temp);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -86,25 +89,35 @@ export function Home() {
         ))}
       </div>
       <div className="mb-6">
-        {statisticsChartsData.map((props) => (
-          data.length > 0 && <StatisticsChart
-            data={data}
-            startDate={dates[0]}
-            endDate={dates[1]}
-            key={props.title}
-            {...props}
-            footer={
-              <Typography
-                variant="small"
-                className="flex items-center font-normal text-blue-gray-600"
-              >
-                <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
-                &nbsp;{props.footer}
-              </Typography>
-            }
-          />
-
-        ))}
+        {
+          loading ?
+            <div className="flex flex-col h-96">
+              <div className='grow flex space-x-2 justify-center items-center dark:invert'>
+                <span className='sr-only'>Loading...</span>
+                <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                <div className='h-8 w-8 bg-black rounded-full animate-bounce'></div>
+              </div>
+            </div> :
+            statisticsChartsData.map((props) => (
+              data.length > 0 && <StatisticsChart
+                data={data}
+                startDate={dates[0]}
+                endDate={dates[1]}
+                key={props.title}
+                {...props}
+                footer={
+                  <Typography
+                    variant="small"
+                    className="flex items-center font-normal text-blue-gray-600"
+                  >
+                    <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
+                    &nbsp;{props.footer}
+                  </Typography>
+                }
+              />
+            ))
+        }
       </div>
     </div>
   );
