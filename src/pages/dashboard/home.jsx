@@ -95,12 +95,14 @@ export function Home() {
       <div className="mb-6">
         {
           loading ?
-            <div className="flex flex-col h-96">
-              <div className='grow flex space-x-2 justify-center items-center dark:invert'>
-                <span className='sr-only'>Loading...</span>
-                <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-                <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
-                <div className='h-8 w-8 bg-black rounded-full animate-bounce'></div>
+            <div className="flex flex-col h-96 items-center justify-center">
+              <div className="relative w-[200px] h-[60px] z-1">
+                <div className="absolute w-[20px] h-[20px] bg-black left-[15%] rounded-full origin-[50%] animate-circle7124"></div>
+                <div className="absolute w-[20px] h-[20px] bg-black left-[45%] rounded-full origin-[50%] animate-circle7124" style={{ animationDelay: '.2s' }}></div>
+                <div className="absolute w-[20px] h-[20px] bg-black right-[15%] rounded-full origin-[50%] animate-circle7124" style={{ animationDelay: '.3s' }}></div>
+                <div className="absolute w-[20px] h-[4px] bg-black bg-opacity-90 left-[15%] rounded-full top-[62px] origin-[50%] -z-1 blur-[1px] animate-shadow046"></div>
+                <div className="absolute w-[20px] h-[4px] bg-black bg-opacity-90 left-[45%] rounded-full top-[62px] origin-[50%] -z-1 blur-[1px] animate-shadow046" style={{ animationDelay: '.2s' }}></div>
+                <div className="absolute w-[20px] h-[4px] bg-black bg-opacity-90 right-[15%] rounded-full top-[62px] origin-[50%] -z-1 blur-[1px] animate-shadow046" style={{ animationDelay: '.3s' }}></div>
               </div>
             </div> :
             statisticsChartsData.map((props) => (
