@@ -22,17 +22,25 @@ export function Home() {
   const [data, setData] = useState([]);
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [delivered, setDelivered] = useState(0);
+  const [returned, setReturned] = useState(0);
 
   const getData = async (startDate, endDate) => {
     try {
+      let returnedOrder = 0;
+      let deliveredOrder = 0;
       setLoading(true);
       const res = await axiosPublic.get('/clients/api/date', {
         params: { startDate: startDate, endDate: endDate }
       });
-
       const temp = Object.values(res.data.reduce((result, currentValue) => {
         const status = currentValue._id.status;
-
+        if (currentValue._id.status.includes('return')) {
+          returnedOrder += currentValue.totalOrder;
+        }
+        if (currentValue._id.status == 'delivered') {
+          deliveredOrder += currentValue.totalOrder;
+        }
         if (!result[status]) {
           result[status] = [];
         }
@@ -41,6 +49,8 @@ export function Home() {
         return result;
       }, {}));
       setData(temp);
+      setReturned(returnedOrder);
+      setDelivered(deliveredOrder);
       console.log("temp->", temp);
       setLoading(false);
     } catch (error) {
@@ -49,17 +59,11 @@ export function Home() {
   }
 
   useEffect(() => {
-    const today = new Date();
-    const lastFifteenDays = new Date(today);
-    lastFifteenDays.setDate(today.getDate() - 15);
-    // const currentDayOfWeek = today.getDay();
-    // const daysSinceLastMonday = (currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1) + 7;
-    // const lastMonday = new Date(today);  
-    // const lastSunday = new Date(today);
-    // lastMonday.setDate(today.getDate() - daysSinceLastMonday);
-    // lastSunday.setDate(today.getDate() - currentDayOfWeek);
-    // setDates([lastMonday, lastSunday]);
-    setDates([lastFifteenDays, today]);
+    const yesterday = new Date();
+    const lastFifteenDays = new Date(yesterday);
+    yesterday.setDate(yesterday.getDate() - 1);
+    lastFifteenDays.setDate(yesterday.getDate() - 15);
+    setDates([lastFifteenDays, yesterday]);
   }, []);
 
   useEffect(() => {
@@ -107,13 +111,20 @@ export function Home() {
                 key={props.title}
                 {...props}
                 footer={
-                  <Typography
-                    variant="small"
-                    className="flex items-center font-normal text-blue-gray-600"
-                  >
-                    <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
-                    &nbsp;{props.footer}
-                  </Typography>
+                  <div className="flex gap-2">
+                    <Typography
+                      variant="h6"
+                      className="flex items-center"
+                    >
+                      Delivered Percentage = {((delivered / (delivered + returned)) * 100).toFixed(2)} %
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      className="flex items-center"
+                    >
+                      Return percentage = {((returned / (delivered + returned)) * 100).toFixed(2)} %
+                    </Typography>
+                  </div>
                 }
               />
             ))
