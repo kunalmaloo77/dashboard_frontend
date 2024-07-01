@@ -59,11 +59,14 @@ export function Home() {
   }
 
   useEffect(() => {
-    const yesterday = new Date();
-    const lastFifteenDays = new Date(yesterday);
-    yesterday.setDate(yesterday.getDate() - 1);
-    lastFifteenDays.setDate(yesterday.getDate() - 15);
-    setDates([lastFifteenDays, yesterday]);
+    const today = new Date();
+    const sevenDaysFromToday = new Date(today);
+    sevenDaysFromToday.setDate(today.getDate() - 7);
+
+    const fifteenDaysBeforeSevenDaysFromToday = new Date(sevenDaysFromToday);
+    fifteenDaysBeforeSevenDaysFromToday.setDate(sevenDaysFromToday.getDate() - 15);
+
+    setDates([fifteenDaysBeforeSevenDaysFromToday, sevenDaysFromToday]);
   }, []);
 
   useEffect(() => {
