@@ -17,6 +17,7 @@ import {
 } from "@/data";
 import { ClockIcon } from "@heroicons/react/24/solid";
 import { axiosPublic } from "@/widgets/utils/axiosInstance";
+import Loader from "@/widgets/utils/loader";
 
 export function Home() {
   const [data, setData] = useState([]);
@@ -98,16 +99,8 @@ export function Home() {
       <div className="mb-6">
         {
           loading ?
-            <div className="flex flex-col h-96 items-center justify-center">
-              <div className="relative w-[200px] h-[60px] z-1">
-                <div className="absolute w-[20px] h-[20px] bg-black left-[15%] rounded-full origin-[50%] animate-circle7124"></div>
-                <div className="absolute w-[20px] h-[20px] bg-black left-[45%] rounded-full origin-[50%] animate-circle7124" style={{ animationDelay: '.2s' }}></div>
-                <div className="absolute w-[20px] h-[20px] bg-black right-[15%] rounded-full origin-[50%] animate-circle7124" style={{ animationDelay: '.3s' }}></div>
-                <div className="absolute w-[20px] h-[4px] bg-black bg-opacity-90 left-[15%] rounded-full top-[62px] origin-[50%] -z-1 blur-[1px] animate-shadow046"></div>
-                <div className="absolute w-[20px] h-[4px] bg-black bg-opacity-90 left-[45%] rounded-full top-[62px] origin-[50%] -z-1 blur-[1px] animate-shadow046" style={{ animationDelay: '.2s' }}></div>
-                <div className="absolute w-[20px] h-[4px] bg-black bg-opacity-90 right-[15%] rounded-full top-[62px] origin-[50%] -z-1 blur-[1px] animate-shadow046" style={{ animationDelay: '.3s' }}></div>
-              </div>
-            </div> :
+            <Loader />
+            :
             statisticsChartsData.map((props) => (
               data.length > 0 && <StatisticsChart
                 data={data}

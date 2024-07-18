@@ -56,14 +56,14 @@ export const routes = [
           },
           {
             name: "Confirmed",
-            value: "withoutawb",
-            path: "withoutawb",
+            value: "confirmed",
+            path: "confirmed",
             element: <WithoutAwb />,
           },
           {
             name: "Ready to Ship",
             value: "ready-to-ship",
-            path: "confirmed",
+            path: "ready-to-ship",
             element: <Confirmed />,
           },
           {

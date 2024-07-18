@@ -11,6 +11,10 @@ import {
   MenuList,
   MenuItem,
   Avatar,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
 } from "@material-tailwind/react";
 import {
   UserCircleIcon,
@@ -25,12 +29,37 @@ import {
   setOpenConfigurator,
   setOpenSidenav,
 } from "@/context";
+import { axiosPublic } from "../utils/axiosInstance";
+import { useState } from "react";
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
+  const [orderid, setOrderid] = useState("");
+  const [data, setData] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const encodedOrderid = encodeURIComponent(orderid);
+      const res = await axiosPublic.get(`/clients/${encodedOrderid}`);
+      setData(res.data);
+      handleOpen();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChange = (e) => {
+    setOrderid(e.target.value);
+  }
+
+  const handleOpen = () => {
+    setOpen(!open);
+  }
 
   return (
     <Navbar
@@ -72,7 +101,24 @@ export function DashboardNavbar() {
         </div>
         <div className="flex items-center">
           <div className="mr-auto md:mr-4 md:w-56">
-            <Input label="Search" />
+            <form onSubmit={handleSearch}>
+              <div className="relative flex w-full">
+                <Input
+                  type="text"
+                  label="OrderId"
+                  value={orderid}
+                  onChange={handleChange}
+                  className="pr-20"
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="!absolute right-1 top-1 rounded"
+                >
+                  Search
+                </Button>
+              </div>
+            </form>
           </div>
           <IconButton
             variant="text"
@@ -186,6 +232,32 @@ export function DashboardNavbar() {
           </IconButton>
         </div>
       </div>
+      <Dialog open={open} handler={handleOpen}>
+        <DialogHeader>Client Details</DialogHeader>
+        <DialogBody>
+          <p>Name: {data?.name}</p>
+          <p>Sku: {data?.sku}</p>
+          <p>Channel Name: {data?.channelname}</p>
+          <p>Quantity: {data?.quantity}</p>
+          <p>Status: {data?.status}</p>
+          <p>Amount: {data?.amount}</p>
+          <p>Total Amount: {data?.totalamount}</p>
+          <p>Postal Code: {data?.postalcode}</p>
+          <p>City: {data?.city}</p>
+          {
+            data?.email && <p>Email: {data?.email}</p>
+          }
+          {
+            data?.address && <p>Address: {data?.address}</p>
+          }
+
+        </DialogBody>
+        <DialogFooter>
+          <Button color="red" onClick={handleOpen}>
+            Close
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </Navbar>
   );
 }

@@ -30,7 +30,7 @@ const websiteViewsChart = {
 function getFirstAndLastDateOfLastWeek() {
   const dates = [];
   const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setDate(yesterday.getDate() - 7);
   const lastFifteenDays = new Date(yesterday);
   lastFifteenDays.setDate(yesterday.getDate() - 15);
   const firstDay = String(lastFifteenDays.getDate()).padStart(2, '0');
