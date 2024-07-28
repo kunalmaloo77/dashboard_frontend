@@ -24,7 +24,11 @@ const RtoRecieved = () => {
   const getRTORecieved = async () => {
     try {
       setLoading(true);
-      const res = await axiosPublic.get('/clients/rtorecieved');
+      const res = await axiosPublic.get('/clients/rtorecieved', {
+        params: {
+          page: currentPage,
+        }
+      });
       setRTOData(res.data.rtoRecieved);
       setTotalPages(res.data.totalPages);
       setLoading(false);

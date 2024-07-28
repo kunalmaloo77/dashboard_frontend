@@ -23,7 +23,11 @@ const Delivered = () => {
   const getDelivered = async () => {
     try {
       setLoading(true);
-      const res = await axiosPublic.get('/clients/delivered');
+      const res = await axiosPublic.get('/clients/delivered', {
+        params: {
+          page: currentPage,
+        }
+      });
       setDeliveredData(res.data.delivered);
       setTotalPages(res.data.totalPages);
       setLoading(false);
@@ -33,7 +37,7 @@ const Delivered = () => {
 
   }
 
-  const TABLE_HEAD = ["unique_id", "date", "order id", "name", "skus", "amount", "quantity", "total amount", "mobile number", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
+  const TABLE_HEAD = ["unique_id", "delivered_date", "order id", "mobile number", "name", "skus", "amount", "quantity", "total amount", "email", "address", "postalcode", "city", "state", "awb number", "channel name"];
 
   useEffect(() => {
     getDelivered();
@@ -128,7 +132,7 @@ const Delivered = () => {
                 </thead>
                 <tbody>
                   {currentItems?.map(
-                    ({ unique_id, orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname }, key) => {
+                    ({ unique_id, orderid, name, sku, amount, quantity, mobilenumber, totalamount, email, date, address, city, state, postalcode, awb, channelname, delivered_date }, key) => {
                       const className = `py-3 px-5 ${key === currentItems.length - 1
                         ? ""
                         : "border-b border-blue-gray-50"
@@ -144,13 +148,18 @@ const Delivered = () => {
                           <td className={className}>
                             <Typography
                               className="text-xs font-semibold text-blue-gray-600">
-                              {date}
+                              {delivered_date}
                             </Typography>
                           </td>
                           <td className={className}>
                             <Typography
                               className="text-xs font-semibold text-blue-gray-600">
                               {orderid}
+                            </Typography>
+                          </td>
+                          <td className={className}>
+                            <Typography className="text-xs font-semibold text-blue-gray-600">
+                              {mobilenumber}
                             </Typography>
                           </td>
                           <td className={className}>
@@ -178,11 +187,6 @@ const Delivered = () => {
                           <td className={className}>
                             <Typography className="text-xs font-semibold text-blue-gray-600">
                               {totalamount}
-                            </Typography>
-                          </td>
-                          <td className={className}>
-                            <Typography className="text-xs font-semibold text-blue-gray-600">
-                              {mobilenumber}
                             </Typography>
                           </td>
                           <td className={className}>

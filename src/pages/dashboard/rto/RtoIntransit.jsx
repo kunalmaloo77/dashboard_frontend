@@ -23,7 +23,11 @@ const RtoIntransit = () => {
   const getRTO = async () => {
     try {
       setLoading(true);
-      const res = await axiosPublic.get('/clients/rtointransit');
+      const res = await axiosPublic.get('/clients/rtointransit', {
+        params: {
+          page: currentPage,
+        }
+      });
       setRTOData(res.data.rtointransit);
       setTotalPages(res.data.totalPages);
       setLoading(false);

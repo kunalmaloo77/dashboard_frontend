@@ -31,6 +31,7 @@ import {
 } from "@/context";
 import { axiosPublic } from "../utils/axiosInstance";
 import { useState } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -38,8 +39,22 @@ export function DashboardNavbar() {
   const { pathname } = useLocation();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
   const [orderid, setOrderid] = useState("");
+  const [mobileNum, setMobileNum] = useState("");
   const [data, setData] = useState(null);
   const [open, setOpen] = useState(false);
+  const [searchType, setSearchType] = useState(null);
+
+  const handleMobileSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axiosPublic.get(`/clients/mobilenumber/${mobileNum}`);
+      setData(res.data);
+      setSearchType("mobile");
+      handleOpen();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -47,6 +62,7 @@ export function DashboardNavbar() {
       const encodedOrderid = encodeURIComponent(orderid);
       const res = await axiosPublic.get(`/clients/${encodedOrderid}`);
       setData(res.data);
+      setSearchType("order");
       handleOpen();
     } catch (error) {
       console.log(error);
@@ -55,6 +71,10 @@ export function DashboardNavbar() {
 
   const handleChange = (e) => {
     setOrderid(e.target.value);
+  }
+
+  const handleMobileChange = (e) => {
+    setMobileNum(e.target.value);
   }
 
   const handleOpen = () => {
@@ -101,6 +121,34 @@ export function DashboardNavbar() {
         </div>
         <div className="flex items-center">
           <div className="mr-auto md:mr-4 md:w-56">
+            <form onSubmit={handleMobileSearch}>
+              <div className="relative flex w-full">
+                <Input
+                  type="text"
+                  label="Mobile Number"
+                  value={mobileNum}
+                  onChange={handleMobileChange}
+                  className="pr-20"
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="!absolute right-1 top-1 rounded"
+                >
+                  <MagnifyingGlassIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </form>
+          </div>
+          <IconButton
+            variant="text"
+            color="blue-gray"
+            className="grid xl:hidden"
+            onClick={() => setOpenSidenav(dispatch, !openSidenav)}
+          >
+            <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
+          </IconButton>
+          <div className="mr-auto md:mr-4 md:w-56">
             <form onSubmit={handleSearch}>
               <div className="relative flex w-full">
                 <Input
@@ -115,7 +163,7 @@ export function DashboardNavbar() {
                   size="sm"
                   className="!absolute right-1 top-1 rounded"
                 >
-                  Search
+                  <MagnifyingGlassIcon className="h-4 w-4" />
                 </Button>
               </div>
             </form>
@@ -232,25 +280,58 @@ export function DashboardNavbar() {
           </IconButton>
         </div>
       </div>
-      <Dialog open={open} handler={handleOpen}>
+      <Dialog open={open} size={searchType === "mobile" ? "xl" : "sm"} handler={handleOpen}>
         <DialogHeader>Client Details</DialogHeader>
         <DialogBody>
-          <p>Name: {data?.name}</p>
-          <p>Sku: {data?.sku}</p>
-          <p>Channel Name: {data?.channelname}</p>
-          <p>Quantity: {data?.quantity}</p>
-          <p>Status: {data?.status}</p>
-          <p>Amount: {data?.amount}</p>
-          <p>Total Amount: {data?.totalamount}</p>
-          <p>Postal Code: {data?.postalcode}</p>
-          <p>City: {data?.city}</p>
-          {
-            data?.email && <p>Email: {data?.email}</p>
-          }
-          {
-            data?.address && <p>Address: {data?.address}</p>
-          }
-
+          {searchType === "mobile" ? (
+            <table>
+              <thead>
+                <tr>
+                  <th className="py-2">Order ID</th>
+                  <th className="py-2">Name</th>
+                  <th className="py-2">Sku</th>
+                  <th className="py-2">Channel Name</th>
+                  <th className="py-2">Quantity</th>
+                  <th className="py-2">Status</th>
+                  <th className="py-2">Amount</th>
+                  <th className="py-2">Total Amount</th>
+                  <th className="py-2">Postal Code</th>
+                  <th className="py-2">City</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.map((item, index) => (
+                  <tr key={index} className="hover:bg-gray-50">
+                    <td className="py-3 px-4 border-b">{item.orderid}</td>
+                    <td className="py-3 px-4 border-b">{item.name}</td>
+                    <td className="py-3 px-4 border-b">{item.sku}</td>
+                    <td className="py-3 px-4 border-b">{item.channelname}</td>
+                    <td className="py-3 px-4 border-b">{item.quantity}</td>
+                    <td className="py-3 px-4 border-b">{item.status}</td>
+                    <td className="py-3 px-4 border-b">{item.amount}</td>
+                    <td className="py-3 px-4 border-b">{item.totalamount}</td>
+                    <td className="py-3 px-4 border-b">{item.postalcode}</td>
+                    <td className="py-3 px-4 border-b">{item.city}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <>
+              <p>Name: {data?.name}</p>
+              <p>Sku: {data?.sku}</p>
+              <p>Channel Name: {data?.channelname}</p>
+              <p>Quantity: {data?.quantity}</p>
+              <p>Status: {data?.status}</p>
+              <p>Amount: {data?.amount}</p>
+              <p>Total Amount: {data?.totalamount}</p>
+              <p>Postal Code: {data?.postalcode}</p>
+              <p>City: {data?.city}</p>
+              {data?.email && <p>Email: {data?.email}</p>}
+              {data?.address && <p>Address: {data?.address}</p>}
+              {data?.mobilenumber && <p>Mobile Number: {data?.mobilenumber}</p>}
+            </>
+          )}
         </DialogBody>
         <DialogFooter>
           <Button color="red" onClick={handleOpen}>
@@ -258,7 +339,7 @@ export function DashboardNavbar() {
           </Button>
         </DialogFooter>
       </Dialog>
-    </Navbar>
+    </Navbar >
   );
 }
 

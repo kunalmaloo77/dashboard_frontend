@@ -59,7 +59,7 @@ const Confirmed = () => {
       setLoading1(false);
     } catch (error) {
       setLoading1(false);
-      console.log(error, "<-resdy_to_ship download error");
+      console.log(error, "<-ready_to_ship download error");
     }
   }
 
@@ -165,12 +165,12 @@ const Confirmed = () => {
                           </td>
                           <td className={className}>
                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                              {sku[key][0].mainSKU}
+                              {sku[key][0]?.mainSKU}
                             </Typography>
                           </td>
                           <td className={className}>
                             <Typography className="text-xs font-semibold text-blue-gray-600">
-                              {sku[key][0].size}
+                              {sku[key][0]?.size}
                             </Typography>
                           </td>
                           <td className={className}>

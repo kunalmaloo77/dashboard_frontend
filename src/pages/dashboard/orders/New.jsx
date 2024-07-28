@@ -171,13 +171,13 @@ const New = () => {
                           <td className={className}>
                             <Typography
                               className="text-xs font-semibold text-blue-gray-600">
-                              {sku[key][0].mainSKU}
+                              {sku[key][0]?.mainSKU}
                             </Typography>
                           </td>
                           <td className={className}>
                             <Typography
                               className="text-xs font-semibold text-blue-gray-600">
-                              {sku[key][0].size}
+                              {sku[key][0]?.size}
                             </Typography>
                           </td>
                           <td className={className}>

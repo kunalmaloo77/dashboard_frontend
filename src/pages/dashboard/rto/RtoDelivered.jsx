@@ -23,7 +23,11 @@ const RtoDelivered = () => {
   const getRTODelivered = async () => {
     try {
       setLoading(true);
-      const res = await axiosPublic.get('/clients/rtodelivered');
+      const res = await axiosPublic.get('/clients/rtodelivered', {
+        params: {
+          page: currentPage,
+        }
+      });
       setRTODeliveredData(res.data.rtoDelivered);
       setTotalPages(res.data.totalPages);
       setLoading(false);
