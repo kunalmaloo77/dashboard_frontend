@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Popover, PopoverContent, PopoverHandler } from '@material-tailwind/react'
 import React, { useState } from 'react'
-import { Flip, toast } from 'react-toastify';
+import { Bounce, Flip, toast } from 'react-toastify';
 import { axiosPublic } from '../utils/axiosInstance';
 
 const Uploadbutton = () => {
@@ -155,15 +155,26 @@ const Uploadbutton = () => {
           'Content-Type': 'multipart/form-data',
         }
       });
+      console.log(res);
       setLoading(false);
-      toast.success("File Uploaded Successfully", {
+      if(res.status == 202){
+        toast.warning("File Uploaded but contains duplicates", {
         position: "top-center",
         autoClose: 1000,
         transition: Flip
-      })
+        })
+      }
+      else{
+        toast.success("File Uploaded Successfully", {
+        position: "top-center",
+        autoClose: 1000,
+        transition: Bounce
+        })
+      }
+      
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 1500);
     } catch (error) {
       setLoading(false);
       if (error.response.status === 400) {
@@ -175,7 +186,7 @@ const Uploadbutton = () => {
       }
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 1500);
     }
   }
 
