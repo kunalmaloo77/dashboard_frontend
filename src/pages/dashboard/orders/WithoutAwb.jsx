@@ -33,8 +33,8 @@ const WithoutAwb = () => {
       oid = '%23' + orderid.slice(1);
     }
     try {
-      const trunacatedoid = orderid.slice(1);
       const res = await axiosPublic.patch(`/clients/awb/${oid}`, product);
+      console.log(res,"<-confirmed-to-shipped");
       toast.success("Order Confirmed", {
         position: "top-center",
         autoClose: 1000,
@@ -58,7 +58,22 @@ const WithoutAwb = () => {
           page: currentPage,
         }
       });
-      setWithoutAwbData(res.data.items);
+      const items = res.data.items.map(order => {
+        const date = new Date(order.date);
+      
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const year = date.getUTCFullYear();
+      
+        const formattedDate = `${day}/${month}/${year}`;
+      
+        return {
+          ...order, // Spread other fields
+          date: formattedDate // Update the date field
+        };
+      });
+      setWithoutAwbData(items);
+      console.log(res.data.items);
       setTotalPages(res.data.totalPages);
       setSku(res.data.Sku);
       setLoading(false);
@@ -263,6 +278,7 @@ const WithoutAwb = () => {
                           <td className={className}>
                             <Typography
                               className="text-xs font-semibold text-blue-gray-600">
+
                               {date}
                             </Typography>
                           </td>
@@ -273,15 +289,14 @@ const WithoutAwb = () => {
                             </Typography>
                           </td>
                           <td className={className}>
-                            <Typography
-                              className="text-xs font-semibold text-blue-gray-600">
-                              {sku[key][0].mainSKU}
+                            <Typography className="text-xs font-semibold" style={{ color: sku[key][0]?.mainSKU ? 'rgb(75, 85, 99)' : 'red' }}>
+                              {sku[key][0]?.mainSKU ? sku[key][0].mainSKU : "NA"}
                             </Typography>
                           </td>
                           <td className={className}>
                             <Typography
-                              className="text-xs font-semibold text-blue-gray-600">
-                              {sku[key][0].size}
+                              className="text-xs font-semibold" style={{ color: sku[key][0]?.size ? 'rgb(75, 85, 99)' : 'red' }}>
+                              {sku[key][0]?.size ? sku[key][0]?.size : "NA"}
                             </Typography>
                           </td>
                           <td className={className}>

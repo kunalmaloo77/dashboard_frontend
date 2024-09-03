@@ -30,7 +30,22 @@ const New = () => {
           page: currentPage,
         }
       });
-      setcurrentItems(res.data.orders);
+      const orders = res.data.orders.map(order => {
+        const date = new Date(order.date);
+      
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const year = date.getUTCFullYear();
+      
+        const formattedDate = `${day}/${month}/${year}`;
+      
+        return {
+          ...order, // Spread other fields
+          date: formattedDate // Update the date field
+        };
+      });
+      setcurrentItems(orders);
+      console.log("orders->",res.data.orders);
       setTotalPages(res.data.totalPages);
       setSku(res.data.Sku);
       setLoading(false);

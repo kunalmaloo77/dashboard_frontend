@@ -28,7 +28,21 @@ const Delivered = () => {
           page: currentPage,
         }
       });
-      setDeliveredData(res.data.delivered);
+      const delivered = res.data.delivered.map(order => {
+          let date = new Date(order.date);
+          if(order.delivered_date){
+            date = new Date(order.delivered_date);
+          }
+          const day = String(date.getUTCDate()).padStart(2, '0');
+          const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+          const year = date.getUTCFullYear();
+          const formattedDate = `${day}/${month}/${year}`;
+        return {
+          ...order, // Spread other fields
+          delivered_date: formattedDate // Update the date field
+        };
+      });
+      setDeliveredData(delivered);
       setTotalPages(res.data.totalPages);
       setLoading(false);
     } catch (error) {
