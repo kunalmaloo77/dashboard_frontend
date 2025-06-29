@@ -54,7 +54,7 @@ export function DashboardNavbar() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -67,35 +67,37 @@ export function DashboardNavbar() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleChange = (e) => {
     setOrderid(e.target.value);
-  }
+  };
 
   const handleMobileChange = (e) => {
     setMobileNum(e.target.value);
-  }
+  };
 
   const handleOpen = () => {
     setOpen(!open);
-  }
+  };
 
   return (
     <Navbar
       color={fixedNavbar ? "white" : "transparent"}
-      className={`rounded-xl transition-all ${fixedNavbar
-        ? "sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5"
-        : "px-0 py-1"
-        }`}
+      className={`rounded-xl transition-all ${
+        fixedNavbar
+          ? "sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5"
+          : "px-0 py-1"
+      }`}
       fullWidth
       blurred={fixedNavbar}
     >
       <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
         <div className="capitalize">
           <Breadcrumbs
-            className={`bg-transparent p-0 transition-all ${fixedNavbar ? "mt-1" : ""
-              }`}
+            className={`bg-transparent p-0 transition-all ${
+              fixedNavbar ? "mt-1" : ""
+            }`}
           >
             <Link to={`/${layout}`}>
               <Typography
@@ -113,7 +115,6 @@ export function DashboardNavbar() {
             >
               {page}
             </Typography>
-
           </Breadcrumbs>
           <Typography variant="h6" color="blue-gray">
             {page}
@@ -180,7 +181,7 @@ export function DashboardNavbar() {
             <Button
               variant="text"
               color="blue-gray"
-              className="hidden items-center gap-1 px-4 xl:flex normal-case"
+              className="hidden items-center gap-1 px-4 normal-case xl:flex"
             >
               <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
               Sign In
@@ -280,57 +281,112 @@ export function DashboardNavbar() {
           </IconButton>
         </div>
       </div>
-      <Dialog open={open} size={searchType === "mobile" ? "xl" : "sm"} handler={handleOpen}>
+      <Dialog
+        open={open}
+        size={searchType === "mobile" ? "xl" : "sm"}
+        handler={handleOpen}
+      >
         <DialogHeader>Client Details</DialogHeader>
         <DialogBody>
-          {searchType === "mobile" ? (
-            <table>
-              <thead>
-                <tr>
-                  <th className="py-2">Order ID</th>
-                  <th className="py-2">Name</th>
-                  <th className="py-2">Sku</th>
-                  <th className="py-2">Channel Name</th>
-                  <th className="py-2">Quantity</th>
-                  <th className="py-2">Status</th>
-                  <th className="py-2">Amount</th>
-                  <th className="py-2">Total Amount</th>
-                  <th className="py-2">Postal Code</th>
-                  <th className="py-2">City</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.map((item, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="py-3 px-4 border-b">{item.orderid}</td>
-                    <td className="py-3 px-4 border-b">{item.name}</td>
-                    <td className="py-3 px-4 border-b">{item.sku}</td>
-                    <td className="py-3 px-4 border-b">{item.channelname}</td>
-                    <td className="py-3 px-4 border-b">{item.quantity}</td>
-                    <td className="py-3 px-4 border-b">{item.status}</td>
-                    <td className="py-3 px-4 border-b">{item.amount}</td>
-                    <td className="py-3 px-4 border-b">{item.totalamount}</td>
-                    <td className="py-3 px-4 border-b">{item.postalcode}</td>
-                    <td className="py-3 px-4 border-b">{item.city}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {data ? (
+            searchType === "mobile" ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full border-collapse rounded-md border border-gray-200 bg-white shadow-md">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Order ID
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Name
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Sku
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Channel Name
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Quantity
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Status
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Amount
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Total Amount
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        Postal Code
+                      </th>
+                      <th className="border-b border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">
+                        City
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((item, index) => (
+                      <tr
+                        key={index}
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                        } hover:bg-gray-100`}
+                      >
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.orderid}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.name}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.sku}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.channelname}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.quantity}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.status}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.amount}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.totalamount}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.postalcode}
+                        </td>
+                        <td className="border-b px-4 py-3 text-sm text-gray-600">
+                          {item.city}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <>
+                <p>Name: {data.name}</p>
+                <p>Sku: {data.sku}</p>
+                <p>Channel Name: {data.channelname}</p>
+                <p>Quantity: {data.quantity}</p>
+                <p>Status: {data.status}</p>
+                <p>Amount: {data.amount}</p>
+                <p>Total Amount: {data.totalamount}</p>
+                <p>Postal Code: {data.postalcode}</p>
+                <p>City: {data.city}</p>
+                {data.email && <p>Email: {data.email}</p>}
+                {data.address && <p>Address: {data.address}</p>}
+                {data.mobilenumber && <p>Mobile Number: {data.mobilenumber}</p>}
+              </>
+            )
           ) : (
-            <>
-              <p>Name: {data?.name}</p>
-              <p>Sku: {data?.sku}</p>
-              <p>Channel Name: {data?.channelname}</p>
-              <p>Quantity: {data?.quantity}</p>
-              <p>Status: {data?.status}</p>
-              <p>Amount: {data?.amount}</p>
-              <p>Total Amount: {data?.totalamount}</p>
-              <p>Postal Code: {data?.postalcode}</p>
-              <p>City: {data?.city}</p>
-              {data?.email && <p>Email: {data?.email}</p>}
-              {data?.address && <p>Address: {data?.address}</p>}
-              {data?.mobilenumber && <p>Mobile Number: {data?.mobilenumber}</p>}
-            </>
+            <p className="py-4 text-center text-gray-500">No data available.</p>
           )}
         </DialogBody>
         <DialogFooter>
@@ -339,7 +395,7 @@ export function DashboardNavbar() {
           </Button>
         </DialogFooter>
       </Dialog>
-    </Navbar >
+    </Navbar>
   );
 }
 
